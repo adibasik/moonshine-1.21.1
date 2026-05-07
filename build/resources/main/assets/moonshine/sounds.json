@@ -1,0 +1,62 @@
+{
+  "kolokolnia_kill": {
+    "sounds": [
+      "moonshine:kolokolnia_kill"
+    ]
+  },
+  "moan1": {
+    "sounds": [
+      "moonshine:moan1"
+    ]
+  },
+  "moan2": {
+    "sounds": [
+      "moonshine:moan2"
+    ]
+  },
+  "moan3": {
+    "sounds": [
+      "moonshine:moan3"
+    ]
+  },
+  "moan4": {
+    "sounds": [
+      "moonshine:moan4"
+    ]
+  },
+  "module_disable": {
+    "sounds": [
+      "moonshine:module_disable"
+    ]
+  },
+  "module_enable": {
+    "sounds": [
+      "moonshine:module_enable"
+    ]
+  },
+  "off": {
+    "sounds": [
+      "moonshine:off"
+    ]
+  },
+  "on": {
+    "sounds": [
+      "moonshine:on"
+    ]
+  },
+  "crime": {
+    "sounds": [
+      "moonshine:crime"
+    ]
+  },
+  "metallic": {
+    "sounds": [
+      "moonshine:metallic"
+    ]
+  },
+  "welcome": {
+  "sounds": [
+    "moonshine:welcome"
+  ]
+}
+}

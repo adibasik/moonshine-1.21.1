@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "moonshine",
+  "version": "1.0.01",
+  "name": "Moonshine Client",
+  "description": "Custom Minecraft client with shader-based rendering",
+  "authors": ["You"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/moonshine/textures/capes/cape.png",
+  "environment": "client",
+  "entrypoints": {
+    "preLaunch": [
+      "moonshine.util.mods.config.wave.WaveCapesConfigOverride"
+    ],
+    "client": [
+      "moonshine.Initialization"
+    ]
+  },
+  "mixins": [
+    "mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "fabric-api": "*",
+    "minecraft": "~1.21.11",
+    "java": ">=21"
+  }
+}

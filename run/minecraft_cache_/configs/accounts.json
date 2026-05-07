@@ -1,0 +1,23 @@
+{
+  "accounts": [
+    {
+      "name": "adibasik",
+      "date": "02.05.2026 23:53",
+      "skin": "minecraft:textures/entity/player/wide/steve.png",
+      "pinned": false,
+      "originalIndex": 0
+    },
+    {
+      "name": "smertixjar",
+      "date": "03.05.2026 00:03",
+      "skin": "minecraft:textures/entity/player/wide/steve.png",
+      "pinned": false,
+      "originalIndex": 1
+    }
+  ],
+  "active": {
+    "name": "adibasik",
+    "date": "02.05.2026 23:53",
+    "skin": "minecraft:textures/entity/player/wide/steve.png"
+  }
+}

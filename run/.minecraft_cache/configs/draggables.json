@@ -1,0 +1,62 @@
+{
+  "Watermark": {
+    "x": 10,
+    "y": 10,
+    "width": 234,
+    "height": 22
+  },
+  "HotKeys": {
+    "x": 216,
+    "y": 292,
+    "width": 80,
+    "height": 36
+  },
+  "Notifications": {
+    "x": 420,
+    "y": 370,
+    "width": 84,
+    "height": 16
+  },
+  "test": {
+    "x": 10,
+    "y": 10,
+    "width": 340,
+    "height": 240
+  },
+  "Potions": {
+    "x": 0,
+    "y": 280,
+    "width": 123,
+    "height": 80
+  },
+  "CoolDowns": {
+    "x": 10,
+    "y": 40,
+    "width": 80,
+    "height": 23
+  },
+  "TargetHud": {
+    "x": 301,
+    "y": 351,
+    "width": 112,
+    "height": 40
+  },
+  "Info": {
+    "x": -5,
+    "y": 28,
+    "width": 200,
+    "height": 22
+  },
+  "Staff": {
+    "x": 19,
+    "y": 121,
+    "width": 92,
+    "height": 36
+  },
+  "Inventory": {
+    "x": 20,
+    "y": 60,
+    "width": 200,
+    "height": 80
+  }
+}
