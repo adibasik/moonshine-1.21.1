@@ -2,17 +2,28 @@ package moonshine.modules.impl.render;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import moonshine.Initialization;
+import moonshine.modules.impl.misc.ScoreboardHealth;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.scoreboard.ReadableScoreboardScore;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardDisplaySlot;
+import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.scoreboard.number.StyledNumberFormat;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
@@ -389,7 +400,25 @@ public class Esp extends ModuleStructure {
         }
         return "";
     }
+    public int getPing(PlayerEntity entity) {
+        PlayerListEntry list = mc.getNetworkHandler().getPlayerListEntry(entity.getUuid());
+        return list != null ? list.getLatency() : 0;
+    }
 
+    public float getHealth(LivingEntity entity, boolean gapple) {
+        if (Initialization.getInstance().getManager().getModuleProvider().get(ScoreboardHealth.class).state) {
+            if (entity instanceof PlayerEntity player) {
+                Scoreboard scoreboard = MinecraftClient.getInstance().world.getScoreboard();
+                if (scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME) == null) return 0f;
+                ScoreboardObjective objective = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME);
+                if (objective == null) return 0f;
+                ReadableScoreboardScore score = scoreboard.getScore(player, objective);
+                MutableText text = ReadableScoreboardScore.getFormattedScore(score, objective.getNumberFormatOr(StyledNumberFormat.EMPTY));
+
+                return Float.parseFloat(text.getString().replaceAll("\\D", ""));
+            } else return entity.getHealth() + (gapple ? entity.getAbsorptionAmount() : 0f);
+        } else return entity.getHealth() + (gapple ? entity.getAbsorptionAmount() : 0f);
+    }
     private float getHealth(PlayerEntity player) {
         return player.getHealth() + player.getAbsorptionAmount();
     }

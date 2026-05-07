@@ -63,7 +63,7 @@ damageTiltStrength:1.0
 highContrast:false
 highContrastBlockOutline:false
 narratorHotkey:true
-resourcePacks:["vanilla"]
+resourcePacks:["vanilla","holdmyitems:pack_test"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:ru_ru

@@ -37,7 +37,7 @@
       "type": 1,
       "favorite": false,
       "settings": {
-        "Режим наводки": "SpookyTime",
+        "Режим наводки": "Matrix",
         "Дистанция удара": 3.0,
         "Дистанция поиска": 0.0,
         "Настройки": [
@@ -49,7 +49,7 @@
           "Мобы",
           "Животные"
         ],
-        "Коррекция движения": "Свободная",
+        "Коррекция движения": "Сфокусированная",
         "Сброс спринта": "Легитный",
         "Только криты": true,
         "Умные криты": false
@@ -218,7 +218,7 @@
       }
     },
     "GlassHands": {
-      "enabled": true,
+      "enabled": false,
       "key": -1,
       "type": 1,
       "favorite": false,
@@ -948,7 +948,7 @@
       }
     },
     "ViewModel": {
-      "enabled": true,
+      "enabled": false,
       "key": -1,
       "type": 1,
       "favorite": false,
@@ -1131,15 +1131,13 @@
       }
     },
     "AutoSnow": {
-      "enabled": true,
+      "enabled": false,
       "key": -1,
       "type": 1,
       "favorite": false,
       "settings": {
-        "Режим": "Build",
         "Радиус": 3.5,
         "Только у голема": false,
-        "Проверка инв.": true,
         "Скорость": 14.642858,
         "Махи": true
       }
@@ -1154,7 +1152,7 @@
       }
     },
     "SwingAnimation": {
-      "enabled": true,
+      "enabled": false,
       "key": -1,
       "type": 1,
       "favorite": false,
@@ -1165,6 +1163,13 @@
         "Только при взмахе": false,
         "Только при включенной КиллАуре": false
       }
+    },
+    "ScoreboardHealth": {
+      "enabled": true,
+      "key": -1,
+      "type": 1,
+      "favorite": false,
+      "settings": {}
     },
     "AutoSprint": {
       "enabled": true,
@@ -1757,6 +1762,6 @@
     }
   },
   "version": "2.0",
-  "timestamp": 1778157570732,
+  "timestamp": 1778164743083,
   "client": "Moonshine Modern"
 }

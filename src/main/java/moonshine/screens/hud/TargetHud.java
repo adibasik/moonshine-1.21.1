@@ -1,10 +1,20 @@
 package moonshine.screens.hud;
 
+import moonshine.Initialization;
+import moonshine.modules.impl.misc.ScoreboardHealth;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.scoreboard.ReadableScoreboardScore;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardDisplaySlot;
+import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.scoreboard.number.StyledNumberFormat;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 import moonshine.client.draggables.AbstractHudElement;
 import moonshine.modules.impl.combat.Aura;
@@ -66,6 +76,20 @@ public class TargetHud extends AbstractHudElement {
     private float getHealth(LivingEntity entity) {
         if (entity.isInvisible() && !Network.isSpookyTime() && !Network.isCopyTime()) {
             return entity.getMaxHealth();
+        }
+        if (Network.isReallyWorld()){
+            if (Initialization.getInstance().getManager().getModuleProvider().get(ScoreboardHealth.class).state) {
+                if (entity instanceof PlayerEntity player) {
+                    Scoreboard scoreboard = MinecraftClient.getInstance().world.getScoreboard();
+                    if (scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME) == null) return 0f;
+                    ScoreboardObjective objective = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME);
+                    if (objective == null) return 0f;
+                    ReadableScoreboardScore score = scoreboard.getScore(player, objective);
+                    MutableText text = ReadableScoreboardScore.getFormattedScore(score, objective.getNumberFormatOr(StyledNumberFormat.EMPTY));
+
+                    return Float.parseFloat(text.getString().replaceAll("\\D", ""));
+                } else return entity.getHealth() + entity.getAbsorptionAmount();
+            } else return entity.getHealth() + entity.getAbsorptionAmount();
         }
         return entity.getHealth();
     }

@@ -104,6 +104,7 @@ public class ModuleRepository {
                 .add(new AutoSnow())
                 .add(new Velocity())
                 .add(new SwingAnimation())
+                .add(new ScoreboardHealth())
                 .add(new AutoSprint())
                 .add(new AutoBuy())
                 .add(new SelfDestruct())
