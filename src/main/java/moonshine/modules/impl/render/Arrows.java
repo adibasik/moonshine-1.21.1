@@ -2,6 +2,8 @@ package moonshine.modules.impl.render;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import moonshine.Initialization;
+import moonshine.util.repository.friend.FriendUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -42,6 +44,8 @@ public class Arrows extends ModuleStructure {
 
     public ColorSetting arrowColor = new ColorSetting("Цвет", "Цвет стрелок")
             .value(0xFF896148);
+    public ColorSetting arrowFriendColor = new ColorSetting("Цвет Друзей", "Цвет стрелок друзей")
+            .value(0xFF896148);
 
     private final SmoothAnimation animationStep = new SmoothAnimation();
     private final SmoothAnimation animatedYaw = new SmoothAnimation();
@@ -52,7 +56,7 @@ public class Arrows extends ModuleStructure {
 
     public Arrows() {
         super("Arrows", "Показывает стрелки в сторону игроков", ModuleCategory.RENDER);
-        settings(arrowsDistance, arrowColor);
+        settings(arrowsDistance, arrowColor, arrowFriendColor);
     }
 
     @Override
@@ -163,7 +167,7 @@ public class Arrows extends ModuleStructure {
             x2 += animatedYaw.getValue();
             y2 += animatedPitch.getValue();
 
-            int color = applyAlpha(arrowColor.getColor(), animValue);
+            int color = applyAlpha(FriendUtils.isFriend(player) ? arrowFriendColor.getColor() : arrowColor.getColor(), animValue);
 
             drawArrow(context, (float) x2, (float) y2, angle, color, 1);
         }

@@ -103,47 +103,38 @@ public class Watermark extends AbstractHudElement {
         }
         setHeight(22);
 
+        int panel = new Color(14, 17, 22, 225).getRGB();
+        int panelLight = new Color(27, 34, 42, 205).getRGB();
+        int outline = new Color(83, 98, 112, 135).getRGB();
+        int accent = new Color(98, 189, 255, 230).getRGB();
+
+        Render2D.blur(x - 12, y + 3, 20, 20, 4, 6, new Color(0, 0, 0, 90).getRGB());
         Render2D.gradientRect(x - 12, y + 3, 20, 20,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(255),
-                        moonshine.util.color.ClientColors.secondary(255),
-                        moonshine.util.color.ClientColors.primary(255),
-                        moonshine.util.color.ClientColors.secondary(255)
-                },
+                new int[]{panelLight, panel, panel, panelLight},
                 5);
+        Render2D.outline(x - 12, y + 3, 20, 20, 0.45f, outline, 5);
 
-        Render2D.outline(x - 12, y + 3, 20, 20, 0.35f, new Color(90, 90, 90, 255).getRGB(), 5);
-
+        Render2D.blur(x + 10, y + 3, totalWidth, 20, 4, 6, new Color(0, 0, 0, 85).getRGB());
         Render2D.gradientRect(x + 10, y + 3, totalWidth, 20,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(255),
-                        moonshine.util.color.ClientColors.secondary(255),
-                        moonshine.util.color.ClientColors.primary(255),
-                        moonshine.util.color.ClientColors.secondary(255)
-                },
+                new int[]{panelLight, panel, panel, panelLight},
                 5);
-
-        Render2D.outline(x + 10, y + 3, totalWidth, 20, 0.35f, new Color(90, 90, 90, 255).getRGB(), 5);
+        Render2D.rect(x + 13, y + 5, 1.5f, 16, accent, 1);
+        Render2D.outline(x + 10, y + 3, totalWidth, 20, 0.45f, outline, 5);
 
         float tpsBoxX = x + 12 + totalWidth;
 
         if (showTps) {
+            Render2D.blur(tpsBoxX, y + 3, tpsBoxWidth, 20, 4, 6, new Color(0, 0, 0, 85).getRGB());
             Render2D.gradientRect(tpsBoxX, y + 3, tpsBoxWidth, 20,
-                    new int[]{
-                            moonshine.util.color.ClientColors.primary(255),
-                            moonshine.util.color.ClientColors.secondary(255),
-                            moonshine.util.color.ClientColors.primary(255),
-                            moonshine.util.color.ClientColors.secondary(255)
-                    },
+                    new int[]{panelLight, panel, panel, panelLight},
                     5);
-
-            Render2D.outline(tpsBoxX, y + 3, tpsBoxWidth, 20, 0.35f, new Color(90, 90, 90, 255).getRGB(), 5);
+            Render2D.outline(tpsBoxX, y + 3, tpsBoxWidth, 20, 0.45f, outline, 5);
         }
 
         float textY = y + 7;
         float textX = x + 10;
 
-        Fonts.ICONS.draw("A", textX - 18, textY, 12, new Color(255, 255, 255, 255).getRGB());
+        Fonts.ICONS.draw("A", textX - 18, textY, 12, new Color(235, 247, 255, 255).getRGB());
 
         float offsetX = textX + 5;
 

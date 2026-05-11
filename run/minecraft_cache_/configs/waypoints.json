@@ -12,5 +12,19 @@
     "y": 100,
     "z": -2000,
     "server": "mc.reallyworld.ru"
+  },
+  {
+    "name": "1",
+    "x": -414,
+    "y": 20,
+    "z": 631,
+    "server": "mc.reallyworld.ru"
+  },
+  {
+    "name": "12\\",
+    "x": -414,
+    "y": 80,
+    "z": 631,
+    "server": "mc.reallyworld.ru"
   }
 ]

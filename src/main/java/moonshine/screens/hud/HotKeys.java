@@ -133,15 +133,7 @@ public class HotKeys extends AbstractHudElement {
         int bgAlpha = (int) (255 * alphaFactor);
 
         if (contentHeight > 0) {
-            Render2D.gradientRect(x, y, getWidth(), contentHeight,
-                    new int[]{
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.secondary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.secondary(bgAlpha)
-                    },
-                    5);
-            Render2D.outline(x, y, getWidth(), contentHeight, 0.35f, new Color(90, 90, 90, bgAlpha).getRGB(), 5);
+            HudStyle.panel(x, y, getWidth(), contentHeight, alphaFactor, 5);
         }
 
         Scissor.enable(x, y, getWidth(), contentHeight,2);
@@ -151,18 +143,11 @@ public class HotKeys extends AbstractHudElement {
         float countTextWidth = Fonts.BOLD.getWidth(moduleCountText, 6);
         float activeTextWidth = Fonts.BOLD.getWidth("Active:", 6);
 
-        Render2D.gradientRect(x + getWidth() - countTextWidth - activeTextWidth + 2, y + 5, 14, 12,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha)
-                },
-                3);
+        HudStyle.chip(x + getWidth() - countTextWidth - activeTextWidth + 2, y + 5, 14, 12, alphaFactor, 3);
 
-        Fonts.HUD_ICONS.draw("g", x + getWidth() - countTextWidth - activeTextWidth + 4, y + 6, 10, new Color(165, 165, 165, bgAlpha).getRGB());
+        Fonts.HUD_ICONS.draw("g", x + getWidth() - countTextWidth - activeTextWidth + 4, y + 6, 10, HudStyle.accent(alphaFactor));
 
-        Fonts.BOLD.draw("Binds", x + 8, y + 6.5f, 6, new Color(255, 255, 255, bgAlpha).getRGB());
+        Fonts.BOLD.draw("Binds", x + 8, y + 6.5f, 6, HudStyle.text(alphaFactor));
 
         int moduleOffset = 23;
 
@@ -174,47 +159,27 @@ public class HotKeys extends AbstractHudElement {
 
             float bindBoxX = x + getWidth() - bindWidth - 11.5f;
 
-            Render2D.gradientRect(bindBoxX, y + moduleOffset - 2f, bindWidth + 4, 9,
-                    new int[]{
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha)
-                    },
-                    3);
-
-            Render2D.outline(bindBoxX, y + moduleOffset - 2f, bindWidth + 4, 9, 0.05f,
-                    new Color(132, 132, 132, bgAlpha).getRGB(), 2);
+            HudStyle.chip(bindBoxX, y + moduleOffset - 2f, bindWidth + 4, 9, alphaFactor, 3);
 
             Render2D.rect(x + 8, y + moduleOffset - 1, 1f, 7,
-                    new Color(155, 155, 155, (int) (128 * alphaFactor)).getRGB(), 1);
+                    new Color(94, 211, 255, (int) (150 * alphaFactor)).getRGB(), 1);
             Fonts.BOLD.draw(name, x + 13, y + moduleOffset - 1.5f, 6,
-                    new Color(255, 255, 255, bgAlpha).getRGB());
+                    HudStyle.text(alphaFactor));
             Fonts.BOLD.draw(bind, bindBoxX + 2, y + moduleOffset - 1, 6,
-                    new Color(165, 165, 165, bgAlpha).getRGB());
+                    HudStyle.muted(alphaFactor));
         } else {
             for (ModuleStructure module : keysList) {
                 String bind = "[" + KeyHelper.getKeyName(module.getKey()) + "]";
 
                 float bindWidth = Fonts.BOLD.getWidth(bind, 6);
 
-                int textColor = new Color(255, 255, 255, bgAlpha).getRGB();
-                int accentColor = new Color(165, 165, 165, bgAlpha).getRGB();
-                int separatorColor = new Color(155, 155, 155, (int) (128 * alphaFactor)).getRGB();
+                int textColor = HudStyle.text(alphaFactor);
+                int accentColor = HudStyle.muted(alphaFactor);
+                int separatorColor = new Color(94, 211, 255, (int) (150 * alphaFactor)).getRGB();
 
                 float bindBoxX = x + getWidth() - bindWidth - 11.5f;
 
-                Render2D.gradientRect(bindBoxX, y + moduleOffset - 2f, bindWidth + 4, 9,
-                        new int[]{
-                                moonshine.util.color.ClientColors.primary(bgAlpha),
-                                moonshine.util.color.ClientColors.primary(bgAlpha),
-                                moonshine.util.color.ClientColors.primary(bgAlpha),
-                                moonshine.util.color.ClientColors.primary(bgAlpha)
-                        },
-                        3);
-
-                Render2D.outline(bindBoxX, y + moduleOffset - 2f, bindWidth + 4, 9, 0.05f,
-                        new Color(132, 132, 132, bgAlpha).getRGB(), 2);
+                HudStyle.chip(bindBoxX, y + moduleOffset - 2f, bindWidth + 4, 9, alphaFactor, 3);
 
                 Render2D.rect(x + 8, y + moduleOffset - 1, 1f, 7, separatorColor, 1);
                 Fonts.BOLD.draw(module.getName(), x + 13, y + moduleOffset - 1.5f, 6, textColor);

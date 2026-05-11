@@ -177,25 +177,14 @@ public class Notifications extends AbstractHudElement {
             int icAlpha = clampAlpha(155 * anim * alphaFactor);
 
             if (bgAlpha > 0) {
-                Render2D.gradientRect(startX, startY, width, NOTIFICATION_HEIGHT,
-                        new int[]{
-                                moonshine.util.color.ClientColors.primary(bgAlpha),
-                                moonshine.util.color.ClientColors.secondary(bgAlpha),
-                                moonshine.util.color.ClientColors.primary(bgAlpha),
-                                moonshine.util.color.ClientColors.secondary(bgAlpha)
-                        }, 4);
-
-                Render2D.outline(startX, startY, width, NOTIFICATION_HEIGHT, 0.35f,
-                        new Color(90, 90, 90, bgAlpha).getRGB(), 4);
-
-                Render2D.outline(startX + 2.75f, startY + 2, 12, 12, 0.35f,
-                        new Color(90, 90, 90, bgAlpha).getRGB(), 4);
+                HudStyle.panel(startX, startY, width, NOTIFICATION_HEIGHT, anim * alphaFactor, 4);
+                HudStyle.chip(startX + 2.75f, startY + 2, 12, 12, anim * alphaFactor, 4);
 
                 Fonts.BOLD.draw(notification.text, startX + offsetX + 16, startY + 4.5f, 6,
-                        new Color(255, 255, 255, bgAlpha).getRGB());
+                        new Color(240, 246, 248, bgAlpha).getRGB());
 
                 Fonts.GUI_ICONS.draw("C", startX + 5f, startY + 4f, 8,
-                        new Color(255, 255, 255, icAlpha).getRGB());
+                        new Color(94, 211, 255, icAlpha).getRGB());
             }
 
             totalHeight = Math.max(totalHeight, notification.currentY + NOTIFICATION_HEIGHT);

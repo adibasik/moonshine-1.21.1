@@ -258,30 +258,15 @@ public class Staff extends AbstractHudElement {
         int bgAlpha = (int) (255 * alphaFactor);
 
         if (contentHeight > 0) {
-            Render2D.gradientRect(x, y, getWidth(), contentHeight,
-                    new int[]{
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.secondary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.secondary(bgAlpha)
-                    },
-                    5);
-            Render2D.outline(x, y, getWidth(), contentHeight, 0.35f, new Color(90, 90, 90, bgAlpha).getRGB(), 5);
+            HudStyle.panel(x, y, getWidth(), contentHeight, alphaFactor, 5);
         }
 
         Scissor.enable(x, y, getWidth(), contentHeight, 2);
 
-        Render2D.gradientRect(x + getWidth() - 18.5f, y + 5, 14, 12,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha)
-                },
-                3);
+        HudStyle.chip(x + getWidth() - 18.5f, y + 5, 14, 12, alphaFactor, 3);
 
-        Fonts.ICONS.draw("E", x + getWidth() - 15.5f, y + 7.5f, 8, new Color(165, 165, 165, bgAlpha).getRGB());
-        Fonts.BOLD.draw("Staff", x + 8, y + 6.5f, 6, new Color(255, 255, 255, bgAlpha).getRGB());
+        Fonts.ICONS.draw("E", x + getWidth() - 15.5f, y + 7.5f, 8, HudStyle.accent(alphaFactor));
+        Fonts.BOLD.draw("Staff", x + 8, y + 6.5f, 6, HudStyle.text(alphaFactor));
 
         int moduleOffset = 23;
 
@@ -296,7 +281,7 @@ public class Staff extends AbstractHudElement {
             drawFace(exampleSkin, faceX, faceY, bgAlpha);
 
             float nameX = x + 8 + FACE_SIZE + 4;
-            Fonts.BOLD.draw(name, nameX, y + moduleOffset - 1.5f, 6, new Color(255, 255, 255, bgAlpha).getRGB());
+            Fonts.BOLD.draw(name, nameX, y + moduleOffset - 1.5f, 6, HudStyle.text(alphaFactor));
 
             float circleX = x + getWidth() - 14f;
             float circleY = y + moduleOffset - 0.5f;
@@ -322,7 +307,7 @@ public class Staff extends AbstractHudElement {
                 drawFace(skinToUse, faceX, faceY, textAlpha);
 
                 float nameX = faceX + FACE_SIZE + 4;
-                Fonts.BOLD.draw(info.name, nameX, y + moduleOffset - 1.5f, 6, new Color(255, 255, 255, textAlpha).getRGB());
+                Fonts.BOLD.draw(info.name, nameX, y + moduleOffset - 1.5f, 6, new Color(240, 246, 248, textAlpha).getRGB());
 
                 float circleX = x + getWidth() - 14f;
                 float circleY = y + moduleOffset - 0.5f;
@@ -353,16 +338,7 @@ public class Staff extends AbstractHudElement {
     }
 
     private void drawStatusCircle(float circleX, float circleY, int alpha) {
-        Render2D.gradientRect(circleX - 3, circleY - 2, 11, 9,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(alpha),
-                        moonshine.util.color.ClientColors.primary(alpha),
-                        moonshine.util.color.ClientColors.primary(alpha),
-                        moonshine.util.color.ClientColors.primary(alpha)
-                },
-                3);
-
-        Render2D.outline(circleX - 3, circleY - 2, 11, 9, 0.35f, new Color(90, 90, 90, alpha).getRGB(), 3);
+        HudStyle.chip(circleX - 3, circleY - 2, 11, 9, alpha / 255.0f, 3);
         Render2D.rect(circleX, circleY, CIRCLE_SIZE, CIRCLE_SIZE, new Color(255, 80, 80, alpha).getRGB(), CIRCLE_SIZE / 2f);
     }
 }

@@ -1,15 +1,15 @@
 {
-  "proxyEnabled": false,
+  "proxyEnabled": true,
   "defaultProxy": {
-    "ipPort": "",
+    "ipPort": "70.34.251.115:10001",
     "type": "SOCKS5",
-    "username": "",
-    "password": ""
+    "username": "76mdorj18",
+    "password": "npct5zfxe"
   },
   "lastUsedProxy": {
-    "ipPort": "",
+    "ipPort": "45.12.129.156:10001",
     "type": "SOCKS5",
-    "username": "",
-    "password": ""
+    "username": "v38956wdz",
+    "password": "j9rqiyy1w"
   }
 }

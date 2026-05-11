@@ -45,6 +45,10 @@ public class Hud extends ModuleStructure {
             .setValue(true)
             .visible(() -> interfaceSettings.isSelected("Watermark"));
 
+    public SelectSetting clickGuiStyle = new SelectSetting("ClickGui Style", "Visual style for ClickGui")
+            .value("Modern", "DropDown")
+            .selected("Modern");
+
     public ColorSetting clientPrimaryColor = new ColorSetting("Client Color 1", "Primary client interface color")
             .value(new Color(52, 52, 52, 255).getRGB());
 
@@ -53,6 +57,6 @@ public class Hud extends ModuleStructure {
 
     public Hud() {
         super("Hud", ModuleCategory.RENDER);
-        settings(interfaceSettings, showBps, showTps, clientPrimaryColor, clientSecondaryColor);
+        settings(interfaceSettings, showBps, showTps, clickGuiStyle, clientPrimaryColor, clientSecondaryColor);
     }
 }

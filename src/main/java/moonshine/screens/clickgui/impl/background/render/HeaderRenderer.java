@@ -1,6 +1,7 @@
 package moonshine.screens.clickgui.impl.background.render;
 
 import moonshine.modules.module.category.ModuleCategory;
+import moonshine.modules.impl.render.Hud;
 import moonshine.screens.clickgui.impl.background.search.SearchHandler;
 import moonshine.util.render.Render2D;
 import moonshine.util.render.shader.Scissor;
@@ -22,6 +23,23 @@ public class HeaderRenderer {
     }
 
     private void renderHeaderPanel(float bgX, float bgY, float bgWidth, float alphaMultiplier) {
+        if (isDropDown()) {
+            int panelAlpha = (int) (150 * alphaMultiplier);
+            int outlineAlpha = (int) (95 * alphaMultiplier);
+            Render2D.rect(bgX + 92f, bgY + 8f, bgWidth - 100f, 24, new Color(14, 21, 24, panelAlpha).getRGB(), 5);
+            Render2D.outline(bgX + 92f, bgY + 8f, bgWidth - 100f, 24, 0.5f, new Color(86, 124, 128, outlineAlpha).getRGB(), 5);
+            Render2D.rect(bgX + 100f, bgY + 31f, bgWidth - 116f, 0.6f, new Color(87, 229, 211, (int) (62 * alphaMultiplier)).getRGB(), 0);
+            return;
+        }
+        if (isModern()) {
+            int panelAlpha = (int) (155 * alphaMultiplier);
+            int outlineAlpha = (int) (95 * alphaMultiplier);
+            Render2D.rect(bgX + 92f, bgY + 8f, bgWidth - 100f, 24, new Color(18, 22, 28, panelAlpha).getRGB(), 6);
+            Render2D.outline(bgX + 92f, bgY + 8f, bgWidth - 100f, 24, 0.5f, new Color(84, 99, 114, outlineAlpha).getRGB(), 6);
+            Render2D.rect(bgX + 100f, bgY + 31f, bgWidth - 116f, 0.6f, new Color(90, 180, 255, (int) (70 * alphaMultiplier)).getRGB(), 0);
+            return;
+        }
+
         int panelAlpha = (int) (25 * alphaMultiplier);
         int outlineAlpha = (int) (255 * alphaMultiplier);
 
@@ -38,12 +56,16 @@ public class HeaderRenderer {
         int outlineAlpha = (int) (255 * alphaMultiplier);
         int panelAlpha = (int) (25 * alphaMultiplier);
 
+        boolean modern = isModern();
+        boolean dropDown = isDropDown();
         Color searchOutline = searchHandler.isSearchActive()
-                ? new Color(180, 180, 180, outlineAlpha)
-                : new Color(55, 55, 55, outlineAlpha);
+                ? new Color(dropDown ? 87 : (modern ? 98 : 180), dropDown ? 229 : (modern ? 189 : 180), dropDown ? 211 : (modern ? 255 : 180), outlineAlpha)
+                : new Color(dropDown ? 74 : (modern ? 74 : 55), dropDown ? 103 : (modern ? 88 : 55), dropDown ? 102 : (modern ? 103 : 55), outlineAlpha);
 
         int searchBgAlpha = (int) ((25 + searchHandler.getSearchFocusAnimation() * 15) * alphaMultiplier);
-        Render2D.rect(searchBoxX, searchBoxY, searchBoxW, searchBoxH, moonshine.util.color.ClientColors.secondary(searchBgAlpha), 4);
+        Render2D.rect(searchBoxX, searchBoxY, searchBoxW, searchBoxH,
+                (modern || dropDown) ? new Color(dropDown ? 10 : 12, dropDown ? 17 : 15, dropDown ? 19 : 20, Math.max(searchBgAlpha, (int) (120 * alphaMultiplier))).getRGB()
+                        : moonshine.util.color.ClientColors.secondary(searchBgAlpha), 4);
         Render2D.outline(searchBoxX, searchBoxY, searchBoxW, searchBoxH, 0.5f, searchOutline.getRGB(), 4);
 
         float textAreaX = searchBoxX + 5;
@@ -56,7 +78,8 @@ public class HeaderRenderer {
             Fonts.BOLD.draw("Search Modules...", textAreaX, searchBoxY + 5f, 5, new Color(128, 128, 128, outlineAlpha).getRGB());
         }
 
-        Render2D.rect(searchBoxX + 53, searchBoxY + 3.5f, 1, searchBoxH - 7, moonshine.util.color.ClientColors.primary(panelAlpha), 8);
+        Render2D.rect(searchBoxX + 53, searchBoxY + 3.5f, 1, searchBoxH - 7,
+                (modern || dropDown) ? new Color(dropDown ? 80 : 82, dropDown ? 112 : 98, dropDown ? 108 : 112, panelAlpha).getRGB() : moonshine.util.color.ClientColors.primary(panelAlpha), 8);
         Fonts.ICONS.draw("U", searchBoxX + 55, searchBoxY + 1.5f, 12, new Color(128, 128, 128, outlineAlpha).getRGB());
     }
 
@@ -167,6 +190,16 @@ public class HeaderRenderer {
 
     private float easeOutQuart(float x) {
         return 1f - (float) Math.pow(1 - x, 4);
+    }
+
+    private boolean isModern() {
+        Hud hud = Hud.getInstance();
+        return hud == null || hud.clickGuiStyle == null || hud.clickGuiStyle.isSelected("Modern");
+    }
+
+    private boolean isDropDown() {
+        Hud hud = Hud.getInstance();
+        return hud != null && hud.clickGuiStyle != null && hud.clickGuiStyle.isSelected("DropDown");
     }
 
     public boolean isSearchBoxHovered(double mouseX, double mouseY, float bgX, float bgY) {

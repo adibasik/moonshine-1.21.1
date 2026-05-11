@@ -94,14 +94,16 @@ public class Esp extends ModuleStructure {
 
     public SliderSettings boxAlpha = new SliderSettings("Прозрачность", "Прозрачность бокса")
             .setValue(1.0F).range(0.1F, 1.0F).visible(() -> boxType.isSelected("3D Box"));
-
+    public SelectSetting fontType = new SelectSetting("Шрифт", "Шрифт для ESP")
+            .value("Клиентский", "Майнкрафт").selected("Клиентский")
+            .visible(() -> entityType.isSelected("Player"));
     private static final float DISTANCE = 128.0f;
     private static final int GRAY_COLOR = 0xFF888888;
     private static final int WHITE_COLOR = 0xFFFFFFFF;
 
     public Esp() {
         super("Esp", "Esp", ModuleCategory.RENDER);
-        settings(entityType, playerSetting, boxType, boxColor, friendColor, flatBoxOutline, boxAlpha);
+        settings(entityType, playerSetting, boxType, boxColor, friendColor, flatBoxOutline, boxAlpha, fontType);
     }
 
     @EventHandler
@@ -208,6 +210,33 @@ public class Esp extends ModuleStructure {
     }
 
     private void drawPlayerName(DrawContext context, PlayerEntity player, boolean friend, double centerX, double startY, float size) {
+        boolean useMc = fontType.isSelected("Майнкрафт");
+
+        if (useMc) {
+            // --- Майнкрафт шрифт: рисуем displayName как есть + HP ---
+            float hp = getHealth(player, false);
+            float maxHp = player.getMaxHealth();
+            String hpString = " " + getHealthString(hp);
+            int hpColor = getHealthColor(hp, maxHp);
+
+            net.minecraft.text.Text displayName = player.getDisplayName();
+            int nameWidth  = mc.textRenderer.getWidth(displayName);
+            int hpWidth    = mc.textRenderer.getWidth(hpString);
+            int totalWidth = nameWidth + hpWidth;
+            int height     = mc.textRenderer.fontHeight;
+
+            float posX = (float) centerX - totalWidth / 2f;
+            float posY = (float) startY - height;
+
+            Render2D.rect(posX - 4, posY - 1.25f, totalWidth + 8, height + 2, 0x80000000, 2f);
+
+            context.drawText(mc.textRenderer, displayName, (int) posX, (int) posY, 0xFFFFFFFF, true);
+            context.drawText(mc.textRenderer, hpString, (int) (posX + nameWidth), (int) posY, hpColor, true);
+
+            return;
+        }
+
+        // --- Клиентский шрифт: полный парсинг ---
         StringBuilder extraInfo = new StringBuilder();
         if (friend) extraInfo.append("[Friend] ");
         if (AntiBot.getInstance() != null && AntiBot.getInstance().isState() && AntiBot.getInstance().isBot(player)) {
@@ -229,23 +258,26 @@ public class Esp extends ModuleStructure {
             sphere = getSphere(offHand);
         }
 
-        String prefixPart = "";
-        if (!parsed.prefix.isEmpty()) {
-            prefixPart = parsed.prefix + " ";
-        }
-        String namePart = parsed.name;
-        String clanPart = !parsed.clan.isEmpty() ? " " + parsed.clan : "";
+        String prefixPart = !parsed.prefix.isEmpty() ? parsed.prefix + " " : "";
+        String namePart   = parsed.name;
+        String clanPart   = !parsed.clan.isEmpty() ? " " + parsed.clan : "";
         String spherePart = sphere;
-        String extraPart = extraInfo.toString();
+        String extraPart  = extraInfo.toString();
 
-        float extraWidth = extraPart.isEmpty() ? 0 : Fonts.TEST.getWidth(extraPart, size);
+        float hp    = getHealth(player, false);
+        float maxHp = player.getMaxHealth();
+        String hpString = " " + getHealthString(hp);
+        int hpColor = getHealthColor(hp, maxHp);
+
+        float extraWidth  = extraPart.isEmpty()  ? 0 : Fonts.TEST.getWidth(extraPart,  size);
         float prefixWidth = prefixPart.isEmpty() ? 0 : Fonts.TEST.getWidth(prefixPart, size);
-        float nameWidth = Fonts.TEST.getWidth(namePart, size);
-        float clanWidth = clanPart.isEmpty() ? 0 : Fonts.TEST.getWidth(clanPart, size);
+        float nameWidth   = Fonts.TEST.getWidth(namePart, size);
+        float clanWidth   = clanPart.isEmpty()   ? 0 : Fonts.TEST.getWidth(clanPart,   size);
         float sphereWidth = spherePart.isEmpty() ? 0 : Fonts.TEST.getWidth(spherePart, size);
+        float hpWidth     = Fonts.TEST.getWidth(hpString, size);
 
-        float totalWidth = extraWidth + prefixWidth + nameWidth + clanWidth + sphereWidth;
-        float height = Fonts.TEST.getHeight(size);
+        float totalWidth = extraWidth + prefixWidth + nameWidth + clanWidth + sphereWidth + hpWidth;
+        float height     = Fonts.TEST.getHeight(size);
 
         float posX = (float) centerX - totalWidth / 2;
         float posY = (float) startY - height;
@@ -260,7 +292,7 @@ public class Esp extends ModuleStructure {
         }
 
         if (!prefixPart.isEmpty()) {
-            Fonts.TEST.draw(prefixPart, drawX, posY, size, GRAY_COLOR);
+            Fonts.TEST.draw(prefixPart, drawX, posY, size, parsed.prefixColor);
             drawX += prefixWidth;
         }
 
@@ -274,6 +306,36 @@ public class Esp extends ModuleStructure {
 
         if (!spherePart.isEmpty()) {
             Fonts.TEST.draw(spherePart, drawX, posY, size, GRAY_COLOR);
+            drawX += sphereWidth;
+        }
+
+        Fonts.TEST.draw(hpString, drawX, posY, size, hpColor);
+    }
+
+// хелперы для двух режимов шрифта
+
+    private void drawText(DrawContext context, String text, float x, float y, float size, int color, boolean useMc) {
+        if (useMc) {
+            // майнкрафт шрифт — размер фиксированный, size игнорируется
+            context.drawText(mc.textRenderer, text, (int) x, (int) y, color, true);
+        } else {
+            Fonts.TEST.draw(text, x, y, size, color);
+        }
+    }
+
+    private float textWidth(DrawContext context, String text, float size, boolean useMc) {
+        if (useMc) {
+            return mc.textRenderer.getWidth(text);
+        } else {
+            return Fonts.TEST.getWidth(text, size);
+        }
+    }
+
+    private float textHeight(float size, boolean useMc) {
+        if (useMc) {
+            return mc.textRenderer.fontHeight;
+        } else {
+            return Fonts.TEST.getHeight(size);
         }
     }
 
@@ -281,11 +343,11 @@ public class Esp extends ModuleStructure {
         int client = friend ? getFriendColor() : getClientColor();
         int black = 0x80000000;
 
-        float posX = (float) vec.x;
-        float posY = (float) vec.y;
+        float posX    = (float) vec.x;
+        float posY    = (float) vec.y;
         float endPosX = (float) vec.z;
         float endPosY = (float) vec.w;
-        float size = (endPosX - posX) / 3;
+        float size    = (endPosX - posX) / 3;
 
         if (boxType.isSelected("Corner")) {
             Render2D.rect(posX - 0.5F, posY - 0.5F, size, 0.5F, client);
@@ -319,8 +381,8 @@ public class Esp extends ModuleStructure {
             }
         }
 
-        float posX = (float) (Projection.centerX(vec) - items.size() * 4.5f);
-        float posY = (float) (vec.y - 20);
+        float posX   = (float) (Projection.centerX(vec) - items.size() * 4.5f);
+        float posY   = (float) (vec.y - 20);
         float offset = 0;
 
         for (ItemStack stack : items) {
@@ -333,7 +395,7 @@ public class Esp extends ModuleStructure {
         double posY = vec.w;
 
         ItemStack mainHand = player.getStackInHand(Hand.MAIN_HAND);
-        ItemStack offHand = player.getStackInHand(Hand.OFF_HAND);
+        ItemStack offHand  = player.getStackInHand(Hand.OFF_HAND);
 
         for (ItemStack stack : new ItemStack[]{mainHand, offHand}) {
             if (stack.isEmpty()) continue;
@@ -344,12 +406,12 @@ public class Esp extends ModuleStructure {
     }
 
     private void drawShulkerBox(DrawContext context, ItemStack itemStack, List<ItemStack> stacks, Vector4d vec) {
-        int width = 176;
+        int width  = 176;
         int height = 67;
-        int color = ((BlockItem) itemStack.getItem()).getBlock().getDefaultMapColor().color | 0xFF000000;
+        int color  = ((BlockItem) itemStack.getItem()).getBlock().getDefaultMapColor().color | 0xFF000000;
 
-        float scale = 0.5F;
-        float scaledWidth = width * scale;
+        float scale        = 0.5F;
+        float scaledWidth  = width * scale;
         float scaledHeight = height * scale;
 
         float drawX = (float) Projection.centerX(vec) - scaledWidth / 2;
@@ -358,10 +420,10 @@ public class Esp extends ModuleStructure {
         Render2D.texture(TEXTURE, drawX, drawY, scaledWidth, scaledHeight, color);
         Render2D.blur(drawX, drawY, 1, 1, 0f, 0, ColorUtil.rgba(0, 0, 0, 0));
 
-        float itemScale = scale;
+        float itemScale  = scale;
         float itemStartX = drawX + 7 * scale;
         float itemStartY = drawY + 6 * scale;
-        float itemSize = 18 * scale;
+        float itemSize   = 18 * scale;
 
         int col = 0;
         int row = 0;
@@ -379,10 +441,10 @@ public class Esp extends ModuleStructure {
 
     private void drawText(DrawContext context, String text, double startX, double startY, float size) {
         String cleanText = RwPrefix.stripFormatting(text);
-        float width = Fonts.TEST.getWidth(cleanText, size);
+        float width  = Fonts.TEST.getWidth(cleanText, size);
         float height = Fonts.TEST.getHeight(size);
-        float posX = (float) (startX - width / 2);
-        float posY = (float) startY - height;
+        float posX   = (float) (startX - width / 2);
+        float posY   = (float) startY - height;
 
         Render2D.rect(posX - 4, posY - 1, width + 8, height + 2, 0x80000000, 2f);
         Fonts.TEST.draw(cleanText, posX, posY, size, 0xFFFFFFFF);
@@ -400,6 +462,7 @@ public class Esp extends ModuleStructure {
         }
         return "";
     }
+
     public int getPing(PlayerEntity entity) {
         PlayerListEntry list = mc.getNetworkHandler().getPlayerListEntry(entity.getUuid());
         return list != null ? list.getLatency() : 0;
@@ -409,18 +472,26 @@ public class Esp extends ModuleStructure {
         if (Initialization.getInstance().getManager().getModuleProvider().get(ScoreboardHealth.class).state) {
             if (entity instanceof PlayerEntity player) {
                 Scoreboard scoreboard = MinecraftClient.getInstance().world.getScoreboard();
-                if (scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME) == null) return 0f;
                 ScoreboardObjective objective = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME);
-                if (objective == null) return 0f;
+                if (objective == null) return entity.getHealth() + (gapple ? entity.getAbsorptionAmount() : 0f);
                 ReadableScoreboardScore score = scoreboard.getScore(player, objective);
+                if (score == null) return entity.getHealth() + (gapple ? entity.getAbsorptionAmount() : 0f);
                 MutableText text = ReadableScoreboardScore.getFormattedScore(score, objective.getNumberFormatOr(StyledNumberFormat.EMPTY));
-
-                return Float.parseFloat(text.getString().replaceAll("\\D", ""));
-            } else return entity.getHealth() + (gapple ? entity.getAbsorptionAmount() : 0f);
-        } else return entity.getHealth() + (gapple ? entity.getAbsorptionAmount() : 0f);
+                try {
+                    return Float.parseFloat(text.getString().replaceAll("[^0-9.]", ""));
+                } catch (NumberFormatException e) {
+                    return entity.getHealth() + (gapple ? entity.getAbsorptionAmount() : 0f);
+                }
+            }
+        }
+        return entity.getHealth() + (gapple ? entity.getAbsorptionAmount() : 0f);
     }
-    private float getHealth(PlayerEntity player) {
-        return player.getHealth() + player.getAbsorptionAmount();
+
+    private int getHealthColor(float hp, float maxHp) {
+        float ratio = maxHp > 0 ? hp / maxHp : 0f;
+        if (ratio > 0.6f) return 0xFF55FF55; // зелёный
+        if (ratio > 0.3f) return 0xFFFFAA00; // оранжевый
+        return 0xFFFF5555;                   // красный
     }
 
     private String getHealthString(float hp) {

@@ -8,3 +8,8 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+.gradle/
+build/
+run/logs/
+run/minecraft_cache_/
+*.lock

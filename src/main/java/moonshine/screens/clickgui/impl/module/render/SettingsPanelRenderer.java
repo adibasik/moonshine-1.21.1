@@ -1,6 +1,7 @@
 package moonshine.screens.clickgui.impl.module.render;
 
 import net.minecraft.client.gui.DrawContext;
+import moonshine.modules.impl.render.Hud;
 import moonshine.modules.module.ModuleStructure;
 import moonshine.screens.clickgui.impl.module.handler.ModuleAnimationHandler;
 import moonshine.screens.clickgui.impl.module.handler.ModuleScrollHandler;
@@ -36,10 +37,16 @@ public class SettingsPanelRenderer {
         animHandler.updateSettingAnimations(settingComponents);
         animHandler.updateVisibilityAnimations(settingComponents);
 
-        int panelAlpha = (int) (15 * alphaMultiplier);
-        int outlineAlpha = (int) (215 * alphaMultiplier);
-        Render2D.rect(x, y, width, height, moonshine.util.color.ClientColors.primary(panelAlpha), SETTINGS_PANEL_CORNER_RADIUS);
-        Render2D.outline(x, y, width, height, 0.5f, moonshine.util.color.ClientColors.primary(outlineAlpha), SETTINGS_PANEL_CORNER_RADIUS);
+        int panelAlpha = (int) ((isDropDown() ? 92 : 15) * alphaMultiplier);
+        int outlineAlpha = (int) ((isDropDown() ? 82 : 215) * alphaMultiplier);
+        int panelColor = isDropDown()
+                ? new Color(12, 19, 22, panelAlpha).getRGB()
+                : moonshine.util.color.ClientColors.primary(panelAlpha);
+        int outlineColor = isDropDown()
+                ? new Color(86, 124, 128, outlineAlpha).getRGB()
+                : moonshine.util.color.ClientColors.primary(outlineAlpha);
+        Render2D.rect(x, y, width, height, panelColor, SETTINGS_PANEL_CORNER_RADIUS);
+        Render2D.outline(x, y, width, height, 0.5f, outlineColor, SETTINGS_PANEL_CORNER_RADIUS);
 
         if (selectedModule == null) {
             String text = "Select a module";
@@ -58,7 +65,8 @@ public class SettingsPanelRenderer {
             Fonts.BOLD.draw(desc.length() > 52 ? desc.substring(0, 55) + "..." : desc, x + 15, y + 20, 5, new Color(128, 128, 128, (int) (150 * alphaMultiplier)).getRGB());
             Fonts.GUI_ICONS.draw("C", x + 8, y + 20, 6, new Color(128, 128, 128, (int) (150 * alphaMultiplier)).getRGB());
         }
-        Render2D.rect(x + 8, y + 30, width - 16, 1.25f, moonshine.util.color.ClientColors.primary((int) (64 * alphaMultiplier)), 10);
+        Render2D.rect(x + 8, y + 30, width - 16, 1.25f,
+                isDropDown() ? new Color(87, 229, 211, (int) (62 * alphaMultiplier)).getRGB() : moonshine.util.color.ClientColors.primary((int) (64 * alphaMultiplier)), 10);
 
         float sideInset = CORNER_INSET;
         float bottomInset = CORNER_INSET + 3;
@@ -188,5 +196,10 @@ public class SettingsPanelRenderer {
                 Render2D.rect(x, y + h - size + i, w, 1, new Color(20, 20, 20, (int) fadeAlpha).getRGB(), 0);
             }
         }
+    }
+
+    private boolean isDropDown() {
+        Hud hud = Hud.getInstance();
+        return hud != null && hud.clickGuiStyle != null && hud.clickGuiStyle.isSelected("DropDown");
     }
 }

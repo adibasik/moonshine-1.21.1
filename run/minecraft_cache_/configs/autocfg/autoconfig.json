@@ -7,21 +7,20 @@
       "favorite": false,
       "settings": {
         "Элементы": [
-          "Watermark",
           "HotKeys",
           "Potions",
           "TargetHud",
-          "Info",
-          "Notifications",
-          "Staff"
+          "Staff",
+          "Notifications"
         ],
-        "Show BPS": true,
-        "Show TPS": true,
+        "Show BPS": false,
+        "Show TPS": false,
+        "ClickGui Style": "DropDown",
         "Client Color 1": {
-          "hue": 0.55714285,
-          "saturation": 0.44354838,
-          "brightness": 0.3142857,
-          "alpha": 1.0
+          "hue": 0.6142857,
+          "saturation": 0.48387095,
+          "brightness": 1.0,
+          "alpha": 0.21428572
         },
         "Client Color 2": {
           "hue": 0.3461766,
@@ -62,9 +61,9 @@
       "favorite": false,
       "settings": {
         "Цвет": {
-          "hue": 0.06410256,
-          "saturation": 0.47445256,
-          "brightness": 0.5372549,
+          "hue": 0.55714285,
+          "saturation": 1.0,
+          "brightness": 1.0,
           "alpha": 1.0
         }
       }
@@ -98,11 +97,12 @@
           "alpha": 1.0
         },
         "Контур": false,
-        "Прозрачность": 1.0
+        "Прозрачность": 1.0,
+        "Шрифт": "Клиентский"
       }
     },
     "BlockESP": {
-      "enabled": true,
+      "enabled": false,
       "key": -1,
       "type": 1,
       "favorite": false,
@@ -175,6 +175,12 @@
           "saturation": 0.63709676,
           "brightness": 1.0,
           "alpha": 1.0
+        },
+        "Цвет Друзей": {
+          "hue": 0.32857144,
+          "saturation": 1.0,
+          "brightness": 1.0,
+          "alpha": 1.0
         }
       }
     },
@@ -223,7 +229,7 @@
       "type": 1,
       "favorite": false,
       "settings": {
-        "Сила размытия": 2.2207792,
+        "Сила размытия": 2.1525424,
         "Качество": 3.0,
         "Насыщенность": 0.0,
         "Оттенок": false,
@@ -234,7 +240,7 @@
           "brightness": 1.0,
           "alpha": 1.0
         },
-        "Свечение краёв": true,
+        "Свечение краёв": false,
         "Сила свечения": 0.26623377
       }
     },
@@ -297,7 +303,7 @@
       "type": 1,
       "favorite": false,
       "settings": {
-        "Время": 4831.0
+        "Время": 21039.0
       }
     },
     "AutoTotem": {
@@ -416,7 +422,7 @@
       }
     },
     "Server Assist": {
-      "enabled": false,
+      "enabled": true,
       "key": -1,
       "type": 1,
       "favorite": false,
@@ -440,7 +446,7 @@
           "type": 1
         },
         "Свиток опыта": {
-          "key": -1,
+          "key": 67,
           "type": 1
         },
         "Взрывная трапка": {
@@ -560,18 +566,18 @@
       "type": 1,
       "favorite": false,
       "settings": {
-        "Режим": "Chain",
-        "Скорость вращения кристаллов": 0.5,
+        "Режим": "Crystals",
+        "Скорость вращения кристаллов": 1.4525424,
         "Цвет 1": {
-          "hue": 0.32857144,
+          "hue": 0.62857145,
           "saturation": 0.7764706,
           "brightness": 1.0,
           "alpha": 1.0
         },
         "Цвет 2": {
-          "hue": 0.9186992,
-          "saturation": 0.0,
-          "brightness": 0.39999998,
+          "hue": 0.67142856,
+          "saturation": 1.0,
+          "brightness": 1.0,
           "alpha": 1.0
         },
         "Цвет 3": {
@@ -744,7 +750,7 @@
       "favorite": false,
       "settings": {
         "Свободный обзор": {
-          "key": -1,
+          "key": 86,
           "type": 1
         }
       }
@@ -755,7 +761,7 @@
       "type": 1,
       "favorite": false,
       "settings": {
-        "Режим": "Normal",
+        "Режим": "Dragon Fly",
         "Скорость XZ": 1.5,
         "Скорость Y": 1.5
       }
@@ -768,7 +774,7 @@
       "settings": {}
     },
     "FullBright": {
-      "enabled": true,
+      "enabled": false,
       "key": -1,
       "type": 1,
       "favorite": false,
@@ -883,7 +889,7 @@
       }
     },
     "NameProtect": {
-      "enabled": false,
+      "enabled": true,
       "key": -1,
       "type": 1,
       "favorite": false,
@@ -1082,18 +1088,18 @@
       }
     },
     "AutoSwap": {
-      "enabled": false,
+      "enabled": true,
       "key": -1,
       "type": 1,
       "favorite": false,
       "settings": {
         "Режим": "Legit",
         "Кнопка свапа": {
-          "key": -1,
+          "key": 90,
           "type": 1
         },
-        "Основной предмет": "Totem of Undying",
-        "Вторичный предмет": "Totem of Undying",
+        "Основной предмет": "Player Head",
+        "Вторичный предмет": "Player Head",
         "Стоп движение": true,
         "Стоп спринт": true,
         "Закрыть инвентарь": true,
@@ -1119,6 +1125,53 @@
         "Игнорировать": [
           "Блоки"
         ]
+      }
+    },
+    "CrystalAura": {
+      "enabled": false,
+      "key": 66,
+      "type": 1,
+      "favorite": false,
+      "settings": {
+        "Размещение": true,
+        "Взрыв": true,
+        "Не взрывать себя": true,
+        "Дистанция": 3.584746,
+        "Задержка размещения": 0.0,
+        "Задержка взрыва": 0.0
+      }
+    },
+    "AutoCrystal": {
+      "enabled": true,
+      "key": -1,
+      "type": 1,
+      "favorite": false,
+      "settings": {
+        "Защита": [],
+        "Дистанция до ресурсов": 8.084745,
+        "Легит режим": false,
+        "Задержка свапа": 50.0
+      }
+    },
+    "Shadow": {
+      "enabled": true,
+      "key": -1,
+      "type": 1,
+      "favorite": false,
+      "settings": {
+        "Интервал (тики)": 100.0,
+        "Максимум теней": 4.9661016,
+        "Время затухания (сек)": 1.0,
+        "Sources": [
+          "Hits"
+        ],
+        "Режим цвета": "Кастомный",
+        "Цвет": {
+          "hue": 0.5665937,
+          "saturation": 1.0,
+          "brightness": 1.0,
+          "alpha": 0.27142859
+        }
       }
     },
     "NoSlow": {
@@ -1166,6 +1219,20 @@
     },
     "ScoreboardHealth": {
       "enabled": true,
+      "key": -1,
+      "type": 1,
+      "favorite": false,
+      "settings": {}
+    },
+    "GrimGlide": {
+      "enabled": false,
+      "key": 74,
+      "type": 1,
+      "favorite": false,
+      "settings": {}
+    },
+    "CordsDropper": {
+      "enabled": false,
       "key": -1,
       "type": 1,
       "favorite": false,
@@ -1762,6 +1829,6 @@
     }
   },
   "version": "2.0",
-  "timestamp": 1778164743083,
+  "timestamp": 1778500513324,
   "client": "Moonshine Modern"
 }

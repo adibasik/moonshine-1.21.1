@@ -171,16 +171,13 @@ public class Aura extends ModuleStructure {
             }
 
             if (targetSpeed > 0.35) {
+                Box predictedBox = ElytraTarget.getPredictedBox(target, leadTicks);
                 Vec3d predictedPos = target.getEntityPos().add(targetVelocity.multiply(leadTicks));
                 computedPoint = predictedPos.add(0, target.getHeight() / 2, 0);
 
-                hitbox = new Box(
-                        predictedPos.x - target.getWidth() / 2,
-                        predictedPos.y,
-                        predictedPos.z - target.getWidth() / 2,
-                        predictedPos.x + target.getWidth() / 2,
-                        predictedPos.y + target.getHeight(),
-                        predictedPos.z + target.getWidth() / 2);
+                if (predictedBox != null) {
+                    hitbox = predictedBox;
+                }
             }
         }
 

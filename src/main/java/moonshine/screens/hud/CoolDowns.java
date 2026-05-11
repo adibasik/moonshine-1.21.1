@@ -281,28 +281,15 @@ public class CoolDowns extends AbstractHudElement {
         int bgAlpha = (int) (255 * alphaFactor);
 
         if (contentHeight > 0) {
-            Render2D.gradientRect(x, y, getWidth(), contentHeight,
-                    new int[]{
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.secondary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.secondary(bgAlpha)
-                    }, 5);
-            Render2D.outline(x, y, getWidth(), contentHeight, 0.35f, new Color(90, 90, 90, bgAlpha).getRGB(), 5);
+            HudStyle.panel(x, y, getWidth(), contentHeight, alphaFactor, 5);
         }
 
         Scissor.enable(x, y, getWidth(), contentHeight, FORCED_GUI_SCALE);
 
-        Render2D.gradientRect(x + getWidth() - 22.5f, y + 5, 14, 12,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha)
-                }, 3);
+        HudStyle.chip(x + getWidth() - 22.5f, y + 5, 14, 12, alphaFactor, 3);
 
-        Fonts.ICONS.draw("D", x + getWidth() - 20f, y + 6.5f, 9, new Color(165, 165, 165, bgAlpha).getRGB());
-        Fonts.BOLD.draw("CoolDowns", x + 8, y + 6.5f, 6, new Color(255, 255, 255, bgAlpha).getRGB());
+        Fonts.ICONS.draw("D", x + getWidth() - 20f, y + 6.5f, 9, HudStyle.accent(alphaFactor));
+        Fonts.BOLD.draw("CoolDowns", x + 8, y + 6.5f, 6, HudStyle.text(alphaFactor));
 
         int moduleOffset = 23;
         float timerBoxWidth = fixedTimerWidth + 4;
@@ -313,18 +300,9 @@ public class CoolDowns extends AbstractHudElement {
             String name = "Example CoolDown";
             String duration = "0:00";
 
-            Render2D.gradientRect(fixedTimerBoxX + 1, y + moduleOffset - 1f, timerBoxWidth, 9,
-                    new int[]{
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha)
-                    }, 3);
+            HudStyle.chip(fixedTimerBoxX + 1, y + moduleOffset - 1f, timerBoxWidth, 9, alphaFactor, 3);
 
             Render2D.blur(x, y, 1, 1, 0f, 0, blurTint);
-
-            Render2D.outline(fixedTimerBoxX + 1, y + moduleOffset - 1f, timerBoxWidth, 9, 0.05f,
-                    new Color(132, 132, 132, bgAlpha).getRGB(), 2);
 
             float itemX = x + 8;
             float itemY = y + moduleOffset - 1f;
@@ -336,11 +314,11 @@ public class CoolDowns extends AbstractHudElement {
             }
 
             float nameX = x + 20;
-            Fonts.BOLD.draw(name, nameX, y + moduleOffset - 1f, 6, new Color(255, 255, 255, bgAlpha).getRGB());
+            Fonts.BOLD.draw(name, nameX, y + moduleOffset - 1f, 6, HudStyle.text(alphaFactor));
 
             float durationWidth = Fonts.BOLD.getWidth(duration, 6);
             float durationX = fixedTimerBoxX + (timerBoxWidth - durationWidth) / 2;
-            Fonts.BOLD.draw(duration, durationX + 1, y + moduleOffset, 6, new Color(165, 165, 165, bgAlpha).getRGB());
+            Fonts.BOLD.draw(duration, durationX + 1, y + moduleOffset, 6, HudStyle.muted(alphaFactor));
         } else {
             for (Map.Entry<Item, Float> entry : cooldownAnimations.entrySet()) {
                 Item item = entry.getKey();
@@ -359,17 +337,8 @@ public class CoolDowns extends AbstractHudElement {
 
                 int textAlpha = (int) (255 * animation * alphaFactor);
 
-                Render2D.gradientRect(fixedTimerBoxX + 1, y + moduleOffset - 1f, timerBoxWidth, 9,
-                        new int[]{
-                                moonshine.util.color.ClientColors.primary(textAlpha),
-                                moonshine.util.color.ClientColors.primary(textAlpha),
-                                moonshine.util.color.ClientColors.primary(textAlpha),
-                                moonshine.util.color.ClientColors.primary(textAlpha)
-                        }, 3);
+                HudStyle.chip(fixedTimerBoxX + 1, y + moduleOffset - 1f, timerBoxWidth, 9, animation * alphaFactor, 3);
                 Render2D.blur(x, y, 1, 1, 0f, 0, blurTint);
-
-                Render2D.outline(fixedTimerBoxX + 1, y + moduleOffset - 1f, timerBoxWidth, 9, 0.05f,
-                        new Color(132, 132, 132, textAlpha).getRGB(), 2);
 
                 float itemX = x + 8;
                 float itemY = y + moduleOffset - 1f;
@@ -381,11 +350,11 @@ public class CoolDowns extends AbstractHudElement {
                 }
 
                 float nameX = x + 20;
-                Fonts.BOLD.draw(name, nameX, y + moduleOffset - 0.5f, 6, new Color(255, 255, 255, textAlpha).getRGB());
+                Fonts.BOLD.draw(name, nameX, y + moduleOffset - 0.5f, 6, new Color(240, 246, 248, textAlpha).getRGB());
 
                 float durationWidth = Fonts.BOLD.getWidth(duration, 6);
                 float durationX = fixedTimerBoxX + (timerBoxWidth - durationWidth) / 2;
-                Fonts.BOLD.draw(duration, durationX + 1, y + moduleOffset, 6, new Color(165, 165, 165, textAlpha).getRGB());
+                Fonts.BOLD.draw(duration, durationX + 1, y + moduleOffset, 6, new Color(168, 183, 190, textAlpha).getRGB());
 
                 moduleOffset += (int) (animation * 11);
             }

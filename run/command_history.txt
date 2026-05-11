@@ -1,50 +1,50 @@
-/market search уголь
-/ус
-/ec
-/craft
-/quest1
-/market search уголь
-/quest1
-/market search уголь
-/quest1
-/market search лазуритовый блок
-/quest1
-/market search камень
-/quest1
-/market search камень
-/quest1
-/market search камень
-/quest1
-/market search железный слиток
-/market search дуб
-/quest1
-/ec
-/quest1
-/market search алмазный блок
-/quest1
+/rgi
+/rg i
+/g i
+/rg i
+/reg i
+/rg i
 /fly
-/ec
-/quest1
-/market search нарост
-/quest1
-/market search нарост
-/quest1
-/market search незерский кирпич
-/quest1
-/market search незерские кирпичи
-/quest1
-/market search незерские кирпичи
-/quest1
-/market search тушёный кролик
-/quest1
-/суфд
-/clear
-/cclea
-/clear
-/market search раздатчик
+/rg i
+/rg addmember baban KLauncher_mafgjk
+/rtp
+/near
+/rtp
+/ah
+/rg addmember ban13 KLauncher_mafgjk
+/ah
+/feed
 /craft
-/market search рыча
-/market search губка
-/market search тыква
-/фр
-/ah search кирка
+/tpa VladimirGVV
+/craft
+/l 57234578
+/tpa KLauncher_mafgjk
+/warp alkash
+/spawn
+/tpa KLauncher_mafgjk
+/warp alkash
+/tpa KLauncher_mafgjk
+/spawn
+/tpa KLauncher_mafgjk
+/spawn
+/tpa KLauncher_mafgjk
+/rtp
+/tpa KLauncher_mafgjk
+/warp
+/tpa KLauncher_mafgjk
+/warp
+/rtp
+/warp
+/rtp
+/near
+/spawn
+/цфкз
+/warp alkash
+/tpa KLauncher_mafgjk
+/sethome
+/warp alkash
+/pvp
+/fly
+/pvp
+//war
+/warp alkash

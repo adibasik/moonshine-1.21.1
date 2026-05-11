@@ -1,6 +1,7 @@
 package moonshine.screens.clickgui.impl.background.render;
 
 import moonshine.modules.module.category.ModuleCategory;
+import moonshine.modules.impl.render.Hud;
 import moonshine.util.render.Render2D;
 import moonshine.util.render.font.Fonts;
 
@@ -107,6 +108,15 @@ public class CategoryRenderer {
     }
 
     private void renderCategoryItem(float bgX, float textY, String name, String icon, float animation, float alphaMultiplier) {
+        if (isDropDown()) {
+            renderDropDownCategoryItem(bgX, textY, name, icon, animation, alphaMultiplier);
+            return;
+        }
+        if (isModern()) {
+            renderModernCategoryItem(bgX, textY, name, icon, animation, alphaMultiplier);
+            return;
+        }
+
         float offsetX = animation * MAX_OFFSET;
 
         int baseGray = 128;
@@ -134,6 +144,75 @@ public class CategoryRenderer {
         }
 
         Fonts.BOLD.draw(name, textX, textY, TEXT_SIZE, textColor.getRGB());
+    }
+
+    private void renderDropDownCategoryItem(float bgX, float textY, String name, String icon, float animation, float alphaMultiplier) {
+        float itemX = bgX + 13f;
+        float itemY = textY - 2f;
+        float itemW = 69f;
+        float itemH = 13f;
+
+        int bgAlpha = (int) ((28 + 74 * animation) * alphaMultiplier);
+        int accentAlpha = (int) ((50 + 170 * animation) * alphaMultiplier);
+        int textR = (int) (151 + 87 * animation);
+        int textG = (int) (164 + 70 * animation);
+        int textB = (int) (160 + 44 * animation);
+        int textAlpha = (int) ((150 + 105 * animation) * alphaMultiplier);
+
+        if (animation > 0.01f) {
+            Render2D.rect(itemX, itemY, itemW, itemH, new Color(18, 29, 31, bgAlpha).getRGB(), 3);
+            Render2D.gradientRect(itemX + 4f, itemY + itemH - 2f, itemW - 8f, 1f,
+                    new int[]{
+                            new Color(87, 229, 211, 0).getRGB(),
+                            new Color(87, 229, 211, accentAlpha).getRGB(),
+                            new Color(255, 210, 117, accentAlpha).getRGB(),
+                            new Color(87, 229, 211, 0).getRGB()
+                    },
+                    1);
+        }
+
+        float iconX = bgX + 18f + animation * 2f;
+        float iconWidth = Fonts.CATEGORY_ICONS.getWidth(icon, ICON_SIZE);
+        float textX = iconX + iconWidth + ICON_SPACING;
+        Color textColor = new Color(textR, textG, textB, textAlpha);
+
+        Fonts.CATEGORY_ICONS.draw(icon, iconX, textY + 0.5f, ICON_SIZE, textColor.getRGB());
+        Fonts.BOLD.draw(name, textX, textY, TEXT_SIZE, textColor.getRGB());
+    }
+
+    private void renderModernCategoryItem(float bgX, float textY, String name, String icon, float animation, float alphaMultiplier) {
+        float itemX = bgX + 13f;
+        float itemY = textY - 2f;
+        float itemW = 69f;
+        float itemH = 13f;
+
+        int bgAlpha = (int) ((35 + 70 * animation) * alphaMultiplier);
+        int accentAlpha = (int) ((45 + 165 * animation) * alphaMultiplier);
+        int textValue = (int) (150 + 95 * animation);
+        int textAlpha = (int) ((145 + 110 * animation) * alphaMultiplier);
+
+        if (animation > 0.01f) {
+            Render2D.rect(itemX, itemY, itemW, itemH, new Color(25, 31, 38, bgAlpha).getRGB(), 4);
+            Render2D.rect(itemX, itemY + 2f, 2f, itemH - 4f, new Color(98, 189, 255, accentAlpha).getRGB(), 1);
+        }
+
+        float iconX = bgX + 18f + animation * 2f;
+        float iconWidth = Fonts.CATEGORY_ICONS.getWidth(icon, ICON_SIZE);
+        float textX = iconX + iconWidth + ICON_SPACING;
+        Color textColor = new Color(textValue, textValue, textValue, textAlpha);
+
+        Fonts.CATEGORY_ICONS.draw(icon, iconX, textY + 0.5f, ICON_SIZE, textColor.getRGB());
+        Fonts.BOLD.draw(name, textX, textY, TEXT_SIZE, textColor.getRGB());
+    }
+
+    private boolean isModern() {
+        Hud hud = Hud.getInstance();
+        return hud == null || hud.clickGuiStyle == null || hud.clickGuiStyle.isSelected("Modern");
+    }
+
+    private boolean isDropDown() {
+        Hud hud = Hud.getInstance();
+        return hud != null && hud.clickGuiStyle != null && hud.clickGuiStyle.isSelected("DropDown");
     }
 
     public ModuleCategory getCategoryAtPosition(double mouseX, double mouseY, float bgX, float bgY) {

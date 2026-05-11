@@ -2,6 +2,7 @@ package moonshine.screens.clickgui.impl.module.render;
 
 import net.minecraft.client.gui.DrawContext;
 import org.lwjgl.glfw.GLFW;
+import moonshine.modules.impl.render.Hud;
 import moonshine.modules.module.ModuleStructure;
 import moonshine.screens.clickgui.impl.module.handler.ModuleAnimationHandler;
 import moonshine.screens.clickgui.impl.module.handler.ModuleBindHandler;
@@ -42,10 +43,16 @@ public class ModuleListRenderer {
                        float mouseX, float mouseY, int guiScale, float alphaMultiplier,
                        ModuleAnimationHandler animHandler, ModuleScrollHandler scrollHandler) {
 
-        int panelAlpha = (int) (15 * alphaMultiplier);
-        int outlineAlpha = (int) (215 * alphaMultiplier);
-        Render2D.rect(x, y, width, height, moonshine.util.color.ClientColors.primary(panelAlpha), MODULE_LIST_CORNER_RADIUS);
-        Render2D.outline(x, y, width, height, 0.5f, moonshine.util.color.ClientColors.primary(outlineAlpha), MODULE_LIST_CORNER_RADIUS);
+        int panelAlpha = (int) ((isDropDown() ? 92 : 15) * alphaMultiplier);
+        int outlineAlpha = (int) ((isDropDown() ? 82 : 215) * alphaMultiplier);
+        int panelColor = isDropDown()
+                ? new Color(12, 19, 22, panelAlpha).getRGB()
+                : moonshine.util.color.ClientColors.primary(panelAlpha);
+        int outlineColor = isDropDown()
+                ? new Color(86, 124, 128, outlineAlpha).getRGB()
+                : moonshine.util.color.ClientColors.primary(outlineAlpha);
+        Render2D.rect(x, y, width, height, panelColor, MODULE_LIST_CORNER_RADIUS);
+        Render2D.outline(x, y, width, height, 0.5f, outlineColor, MODULE_LIST_CORNER_RADIUS);
 
         float topInset = CORNER_INSET;
         float bottomInset = CORNER_INSET;
@@ -140,11 +147,15 @@ public class ModuleListRenderer {
 
             if (selected) {
                 bgAlpha = (int) ((selectedBgAlpha + hoverAnim * 10) * combinedAlpha);
-                bgColor = moonshine.util.color.ClientColors.primary(bgAlpha);
+                bgColor = isDropDown()
+                        ? new Color(24, 39, 41, bgAlpha).getRGB()
+                        : moonshine.util.color.ClientColors.primary(bgAlpha);
             } else {
                 bgAlpha = (int) ((baseBgAlpha + (hoverBgAlpha - baseBgAlpha) * hoverAnim) * combinedAlpha);
                 int gray = (int) (64 + 36 * hoverAnim);
-                bgColor = moonshine.util.color.ClientColors.primary(bgAlpha);
+                bgColor = isDropDown()
+                        ? new Color(Math.max(0, gray - 47), Math.max(0, gray - 37), Math.max(0, gray - 36), bgAlpha).getRGB()
+                        : moonshine.util.color.ClientColors.primary(bgAlpha);
             }
 
             float scaledWidth = (width - 6) * scale;
@@ -165,12 +176,16 @@ public class ModuleListRenderer {
                 int outlineG = (int) (80 + 20 * pulseValue + 40 * highlightBoost);
                 int outlineB = (int) (80 + 20 * pulseValue + 40 * highlightBoost);
 
-                Render2D.outline(animX, scaledModY, scaledWidth, scaledHeight, 0.5f,
-                        new Color(Math.min(255, outlineColorValue), Math.min(255, outlineG), Math.min(255, outlineB), outlineAlpha).getRGB(), 5);
+                Color outline = isDropDown()
+                        ? new Color(87, 229, 211, outlineAlpha)
+                        : new Color(Math.min(255, outlineColorValue), Math.min(255, outlineG), Math.min(255, outlineB), outlineAlpha);
+                Render2D.outline(animX, scaledModY, scaledWidth, scaledHeight, 0.5f, outline.getRGB(), 5);
             } else if (hoverAnim > 0.01f) {
                 int outlineAlpha = (int) (60 * hoverAnim * combinedAlpha);
-                Render2D.outline(animX, scaledModY, scaledWidth, scaledHeight, 0.5f,
-                        new Color(120, 120, 120, outlineAlpha).getRGB(), 5);
+                Color outline = isDropDown()
+                        ? new Color(87, 229, 211, outlineAlpha)
+                        : new Color(120, 120, 120, outlineAlpha);
+                Render2D.outline(animX, scaledModY, scaledWidth, scaledHeight, 0.5f, outline.getRGB(), 5);
             }
 
             float stateTextOffset = stateAnim * STATE_TEXT_OFFSET;
@@ -180,7 +195,7 @@ public class ModuleListRenderer {
                 float ballX = animX + 4;
                 float ballY = scaledModY + (scaledHeight - STATE_BALL_SIZE * scale) / 2f + 1F;
                 Render2D.rect(ballX, ballY, STATE_BALL_SIZE * scale, STATE_BALL_SIZE * scale,
-                        new Color(255, 255, 255, (int) ballAlpha).getRGB(),
+                        (isDropDown() ? new Color(87, 229, 211, (int) ballAlpha) : new Color(255, 255, 255, (int) ballAlpha)).getRGB(),
                         STATE_BALL_SIZE * scale / 2f);
             }
 
@@ -221,8 +236,8 @@ public class ModuleListRenderer {
 
                 int starGray = 50;
                 int starR = (int) (starGray + (255 - starGray) * favoriteAnim);
-                int starG = (int) (starGray + (215 - starGray) * favoriteAnim);
-                int starB = (int) (starGray + (0 - starGray) * favoriteAnim);
+                int starG = (int) (starGray + ((isDropDown() ? 210 : 215) - starGray) * favoriteAnim);
+                int starB = (int) (starGray + ((isDropDown() ? 117 : 0) - starGray) * favoriteAnim);
                 float starAlpha = (80 + 120 * favoriteAnim + 55 * hoverAnim) * combinedAlpha;
 
                 Fonts.GUI_ICONS.draw("D", starX, iconY + 1, 8 * scale, new Color(starR, starG, starB, (int) starAlpha).getRGB());
@@ -397,5 +412,10 @@ public class ModuleListRenderer {
 
     private float easeOutCubic(float x) {
         return 1f - (float) Math.pow(1 - x, 3);
+    }
+
+    private boolean isDropDown() {
+        Hud hud = Hud.getInstance();
+        return hud != null && hud.clickGuiStyle != null && hud.clickGuiStyle.isSelected("DropDown");
     }
 }

@@ -252,15 +252,7 @@ public class Potions extends AbstractHudElement {
         int bgAlpha = (int) (255 * alphaFactor);
 
         if (contentHeight > 0) {
-            Render2D.gradientRect(x, y, getWidth(), contentHeight,
-                    new int[]{
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.secondary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.secondary(bgAlpha)
-                    },
-                    5);
-            Render2D.outline(x, y, getWidth(), contentHeight, 0.35f, new Color(90, 90, 90, bgAlpha).getRGB(), 5);
+            HudStyle.panel(x, y, getWidth(), contentHeight, alphaFactor, 5);
         }
 
         Scissor.enable(x, y, getWidth(), contentHeight, 2);
@@ -270,18 +262,11 @@ public class Potions extends AbstractHudElement {
         float countTextWidth = Fonts.BOLD.getWidth(countText, 6);
         float potionsTextWidth = Fonts.BOLD.getWidth("Potions", 6);
 
-        Render2D.gradientRect(x + getWidth() - countTextWidth - potionsTextWidth + 3, y + 5, 14, 12,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha)
-                },
-                3);
+        HudStyle.chip(x + getWidth() - countTextWidth - potionsTextWidth + 3, y + 5, 14, 12, alphaFactor, 3);
 
-        Fonts.HUD_ICONS.draw("f", x + getWidth() - countTextWidth - potionsTextWidth + 5, y + 6, 10, new Color(165, 165, 165, bgAlpha).getRGB());
+        Fonts.HUD_ICONS.draw("f", x + getWidth() - countTextWidth - potionsTextWidth + 5, y + 6, 10, HudStyle.accent(alphaFactor));
 
-        Fonts.BOLD.draw("Potions", x + 8, y + 6.5f, 6, new Color(255, 255, 255, bgAlpha).getRGB());
+        Fonts.BOLD.draw("Potions", x + 8, y + 6.5f, 6, HudStyle.text(alphaFactor));
 
         int moduleOffset = 23;
 
@@ -293,17 +278,7 @@ public class Potions extends AbstractHudElement {
             float timerWidth = Fonts.BOLD.getWidth(timer, 6);
             float timerBoxX = x + getWidth() - timerWidth - 11.5f;
 
-            Render2D.gradientRect(timerBoxX, y + moduleOffset - 2f, timerWidth + 4, 9,
-                    new int[]{
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha),
-                            moonshine.util.color.ClientColors.primary(bgAlpha)
-                    },
-                    3);
-
-            Render2D.outline(timerBoxX, y + moduleOffset - 2f, timerWidth + 4, 9, 0.05f,
-                    new Color(132, 132, 132, bgAlpha).getRGB(), 2);
+            HudStyle.chip(timerBoxX, y + moduleOffset - 2f, timerWidth + 4, 9, alphaFactor, 3);
 
             Identifier randomTexture = getRandomEffectTexture();
             float scale = ICON_SIZE / 18f;
@@ -318,15 +293,15 @@ public class Potions extends AbstractHudElement {
 
             float nameX = x + 20;
             Fonts.BOLD.draw(name, nameX, y + moduleOffset - 1.5f, 6,
-                    new Color(255, 255, 255, bgAlpha).getRGB());
+                    HudStyle.text(alphaFactor));
 
             float nameWidth = Fonts.BOLD.getWidth(name, 6);
 
             Fonts.TEST.draw(levelText, nameX + nameWidth + 2, y + moduleOffset - 0.5f, 5,
-                    new Color(155, 155, 155, bgAlpha).getRGB());
+                    HudStyle.muted(alphaFactor));
 
             Fonts.BOLD.draw(timer, timerBoxX + 2, y + moduleOffset - 1, 6,
-                    new Color(165, 165, 165, bgAlpha).getRGB());
+                    HudStyle.muted(alphaFactor));
         } else if (hasAnimatingEffects) {
             for (Map.Entry<String, Float> entry : effectAnimations.entrySet()) {
                 String id = entry.getKey();
@@ -354,17 +329,7 @@ public class Potions extends AbstractHudElement {
 
                 float timerBoxX = x + getWidth() - timerWidth - 11.5f;
 
-                Render2D.gradientRect(timerBoxX, y + moduleOffset - 2f, timerWidth + 4, 9,
-                        new int[]{
-                                moonshine.util.color.ClientColors.primary(blinkAlpha),
-                                moonshine.util.color.ClientColors.primary(blinkAlpha),
-                                moonshine.util.color.ClientColors.primary(blinkAlpha),
-                                moonshine.util.color.ClientColors.primary(blinkAlpha)
-                        },
-                        3);
-
-                Render2D.outline(timerBoxX, y + moduleOffset - 2f, timerWidth + 4, 9, 0.05f,
-                        new Color(132, 132, 132, blinkAlpha).getRGB(), 2);
+                HudStyle.chip(timerBoxX, y + moduleOffset - 2f, timerWidth + 4, 9, blinkAlpha / 255.0f, 3);
 
                 Identifier effectTexture = getEffectTexture(effect.getEffectType());
                 float scale = ICON_SIZE / 18f;

@@ -82,16 +82,7 @@ public class Inventory extends AbstractHudElement {
 
         int bgAlpha = (int) (255 * alphaFactor);
 
-        Render2D.gradientRect(x + 2, contentY + 2, contentWidth - 4, contentHeight - 4,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.secondary(bgAlpha),
-                        moonshine.util.color.ClientColors.primary(bgAlpha),
-                        moonshine.util.color.ClientColors.secondary(bgAlpha)
-                },
-                5);
-
-        Render2D.outline(x + 2, contentY + 2, contentWidth - 4, contentHeight - 4, 0.35f, new Color(90, 90, 90, bgAlpha).getRGB(), 5);
+        HudStyle.panel(x + 2, contentY + 2, contentWidth - 4, contentHeight - 4, alphaFactor, 5);
 
         float slotsStartX = x + padding;
         float slotsStartY = contentY + padding;
@@ -107,7 +98,8 @@ public class Inventory extends AbstractHudElement {
 
                 ItemStack stack = mc.player.getInventory().getStack(slotIndex);
 
-                Render2D.rect(slotX, slotY, SLOT_SIZE, SLOT_SIZE, new Color(28, 28, 28, bgAlpha).getRGB(), 2);
+                Render2D.rect(slotX, slotY, SLOT_SIZE, SLOT_SIZE, new Color(15, 22, 29, (int) (118 * alphaFactor)).getRGB(), 2);
+                Render2D.outline(slotX, slotY, SLOT_SIZE, SLOT_SIZE, 0.25f, new Color(82, 110, 126, (int) (55 * alphaFactor)).getRGB(), 2);
 
                 if (!stack.isEmpty()) {
                     float itemSize = 16 * ITEM_SCALE;

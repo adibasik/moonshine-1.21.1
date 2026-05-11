@@ -1,6 +1,7 @@
 package moonshine.screens.clickgui.impl.settingsrender;
 
 import net.minecraft.client.gui.DrawContext;
+import moonshine.modules.impl.render.Hud;
 import moonshine.modules.module.setting.implement.MultiSelectSetting;
 import moonshine.util.interfaces.AbstractSettingComponent;
 import moonshine.util.render.Render2D;
@@ -212,11 +213,17 @@ public class MultiSelectComponent extends AbstractSettingComponent {
         float boxY = y + height / 2 - 5;
         float boxHeight = 10f;
 
-        int bgAlpha = 25 + (int)(hoverAnimation * 15);
-        Render2D.rect(boxX, boxY, BOX_WIDTH, boxHeight, applyAlpha(new Color(55, 55, 55, bgAlpha)).getRGB(), 3f);
+        int bgAlpha = isDropDown() ? 70 + (int)(hoverAnimation * 28) : 25 + (int)(hoverAnimation * 15);
+        Color bgColor = isDropDown()
+                ? new Color(13, 19, 23, bgAlpha)
+                : new Color(55, 55, 55, bgAlpha);
+        Render2D.rect(boxX, boxY, BOX_WIDTH, boxHeight, applyAlpha(bgColor).getRGB(), 4f);
 
-        int outlineAlpha = 60 + (int)(hoverAnimation * 40);
-        Render2D.outline(boxX, boxY, BOX_WIDTH, boxHeight, 0.5f, applyAlpha(new Color(155, 155, 155, outlineAlpha)).getRGB(), 3f);
+        int outlineAlpha = isDropDown() ? 75 + (int)(hoverAnimation * 85) : 60 + (int)(hoverAnimation * 40);
+        Color outlineColor = isDropDown()
+                ? new Color(hoverAnimation > 0.01f ? 87 : 78, hoverAnimation > 0.01f ? 229 : 94, hoverAnimation > 0.01f ? 211 : 104, outlineAlpha)
+                : new Color(155, 155, 155, outlineAlpha);
+        Render2D.outline(boxX, boxY, BOX_WIDTH, boxHeight, 0.5f, applyAlpha(outlineColor).getRGB(), 4f);
 
         renderSelectedText(boxX, boxY, BOX_WIDTH, boxHeight, deltaTime);
 
@@ -229,6 +236,20 @@ public class MultiSelectComponent extends AbstractSettingComponent {
 
     private void renderArrowIcon(float iconX, float iconY) {
         int arrowAlpha = 120 + (int)(hoverAnimation * 60);
+
+        if (isDropDown()) {
+            int color = applyAlpha(new Color(166, 188, 186, arrowAlpha)).getRGB();
+            float cx = iconX + 4f;
+            float cy = iconY + 4f;
+            if (expanded) {
+                Render2D.rect(cx - 3f, cy - 1f, 6f, 1f, color, 0.5f);
+                Render2D.rect(cx - 2f, cy + 1f, 4f, 1f, color, 0.5f);
+            } else {
+                Render2D.rect(cx - 3f, cy - 2f, 6f, 1f, color, 0.5f);
+                Render2D.rect(cx - 2f, cy + 1f, 4f, 1f, color, 0.5f);
+            }
+            return;
+        }
 
         float centerX = iconX + 4f;
         float centerY = iconY + 4f;
@@ -311,7 +332,7 @@ public class MultiSelectComponent extends AbstractSettingComponent {
 
         if (noneAlphaAnimation > 0.01f) {
             int noneAlpha = (int)(200 * noneAlphaAnimation * alphaMultiplier);
-            Fonts.BOLD.draw("None", baseX, textY, 5, new Color(160, 160, 165, noneAlpha).getRGB());
+            Fonts.BOLD.draw("None", baseX, textY, 5, (isDropDown() ? new Color(190, 205, 203, noneAlpha) : new Color(160, 160, 165, noneAlpha)).getRGB());
         }
 
         List<String> allItems = multiSelectSetting.getList();
@@ -365,7 +386,7 @@ public class MultiSelectComponent extends AbstractSettingComponent {
 
             int alpha = (int)(200 * itemAlpha * alphaMultiplier);
             if (alpha > 0) {
-                Fonts.BOLD.draw(displayText, renderX, textY, 5, new Color(160, 160, 165, alpha).getRGB());
+                Fonts.BOLD.draw(displayText, renderX, textY, 5, (isDropDown() ? new Color(190, 205, 203, alpha) : new Color(160, 160, 165, alpha)).getRGB());
             }
         }
 
@@ -415,11 +436,13 @@ public class MultiSelectComponent extends AbstractSettingComponent {
 
         float panelAlpha = expandAnimation * alphaMultiplier;
 
-        int panelBgAlpha = (int)(200 * panelAlpha);
-        Render2D.rect(boxX, startY, BOX_WIDTH, visibleHeight, new Color(30, 30, 30, panelBgAlpha).getRGB(), 3f);
+        int panelBgAlpha = (int)((isDropDown() ? 220 : 200) * panelAlpha);
+        Render2D.rect(boxX, startY - (isDropDown() ? 1f : 0f), BOX_WIDTH, visibleHeight + (isDropDown() ? 1f : 0f),
+                (isDropDown() ? new Color(10, 15, 18, panelBgAlpha) : new Color(30, 30, 30, panelBgAlpha)).getRGB(), 4f);
 
-        int panelOutlineAlpha = (int)(100 * panelAlpha);
-        Render2D.outline(boxX, startY, BOX_WIDTH, visibleHeight, 0.5f, new Color(80, 80, 85, panelOutlineAlpha).getRGB(), 3f);
+        int panelOutlineAlpha = (int)((isDropDown() ? 125 : 100) * panelAlpha);
+        Render2D.outline(boxX, startY - (isDropDown() ? 1f : 0f), BOX_WIDTH, visibleHeight + (isDropDown() ? 1f : 0f), 0.5f,
+                (isDropDown() ? new Color(78, 112, 112, panelOutlineAlpha) : new Color(80, 80, 85, panelOutlineAlpha)).getRGB(), 4f);
 
         if (visibleHeight < 1f) return;
 
@@ -446,7 +469,7 @@ public class MultiSelectComponent extends AbstractSettingComponent {
             if (hoverAnim > 0.01f) {
                 int hoverBgAlpha = (int)(30 * hoverAnim * panelAlpha);
                 Render2D.rect(boxX + 2, optionY + 1, BOX_WIDTH - 4, OPTION_HEIGHT - 2,
-                        new Color(100, 100, 105, hoverBgAlpha).getRGB(), 2f);
+                        (isDropDown() ? new Color(27, 42, 44, hoverBgAlpha + 20) : new Color(100, 100, 105, hoverBgAlpha)).getRGB(), 2f);
             }
 
             float checkSize = 6f;
@@ -454,10 +477,10 @@ public class MultiSelectComponent extends AbstractSettingComponent {
             float checkY = optionY + OPTION_HEIGHT / 2 - checkSize / 2;
 
             int checkBgAlpha = (int)((40 + hoverAnim * 20) * panelAlpha);
-            Render2D.rect(checkX, checkY, checkSize, checkSize, new Color(55, 55, 60, checkBgAlpha).getRGB(), 2f);
+            Render2D.rect(checkX, checkY, checkSize, checkSize, (isDropDown() ? new Color(13, 22, 24, checkBgAlpha) : new Color(55, 55, 60, checkBgAlpha)).getRGB(), 2f);
 
             int checkOutlineAlpha = (int)((80 + hoverAnim * 40) * panelAlpha);
-            Render2D.outline(checkX, checkY, checkSize, checkSize, 0.5f, new Color(120, 120, 125, checkOutlineAlpha).getRGB(), 2f);
+            Render2D.outline(checkX, checkY, checkSize, checkSize, 0.5f, (isDropDown() ? new Color(87, 229, 211, checkOutlineAlpha) : new Color(120, 120, 125, checkOutlineAlpha)).getRGB(), 2f);
 
             if (checkAnim > 0.01f) {
                 float innerSize = (checkSize - 2) * checkAnim;
@@ -465,7 +488,7 @@ public class MultiSelectComponent extends AbstractSettingComponent {
                 float innerY = checkY + (checkSize - innerSize) / 2;
 
                 int innerAlpha = (int)(220 * checkAnim * panelAlpha);
-                Render2D.rect(innerX, innerY, innerSize, innerSize, new Color(140, 180, 160, innerAlpha).getRGB(), 1.5f);
+                Render2D.rect(innerX, innerY, innerSize, innerSize, (isDropDown() ? new Color(87, 229, 211, innerAlpha) : new Color(140, 180, 160, innerAlpha)).getRGB(), 1.5f);
             }
 
             float textX = checkX + checkSize + 4;
@@ -482,9 +505,11 @@ public class MultiSelectComponent extends AbstractSettingComponent {
                 displayOption += "..";
             }
 
-            int textGray = (int)(140 + checkAnim * 40 + hoverAnim * 20);
             int textAlpha = (int)(200 * panelAlpha);
-            Fonts.BOLD.draw(displayOption, textX, textY, 5, new Color(textGray, textGray, textGray + 5, textAlpha).getRGB());
+            Color textColor = isDropDown()
+                    ? new Color((int)(158 + checkAnim * 57 + hoverAnim * 20), (int)(174 + checkAnim * 51 + hoverAnim * 16), (int)(172 + checkAnim * 35 + hoverAnim * 14), textAlpha)
+                    : new Color((int)(140 + checkAnim * 40 + hoverAnim * 20), (int)(140 + checkAnim * 40 + hoverAnim * 20), (int)(145 + checkAnim * 40 + hoverAnim * 20), textAlpha);
+            Fonts.BOLD.draw(displayOption, textX, textY, 5, textColor.getRGB());
 
             optionY += OPTION_HEIGHT;
         }
@@ -543,5 +568,10 @@ public class MultiSelectComponent extends AbstractSettingComponent {
         float baseHeight = height;
         float expandedHeight = multiSelectSetting.getList().size() * OPTION_HEIGHT * expandAnimation;
         return baseHeight + expandedHeight;
+    }
+
+    private boolean isDropDown() {
+        Hud hud = Hud.getInstance();
+        return hud != null && hud.clickGuiStyle != null && hud.clickGuiStyle.isSelected("DropDown");
     }
 }

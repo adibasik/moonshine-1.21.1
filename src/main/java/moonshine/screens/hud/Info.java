@@ -105,16 +105,17 @@ public class Info extends AbstractHudElement {
         }
         setHeight(22);
 
-        Render2D.gradientRect(x + 12, y + 3, coordsWidth, 20,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(255),
-                        new Color(22, 22, 22, 255).getRGB(),
-                        moonshine.util.color.ClientColors.primary(255),
-                        new Color(22, 22, 22, 255).getRGB()
-                },
-                5);
+        int panel = new Color(14, 17, 22, 225).getRGB();
+        int panelLight = new Color(27, 34, 42, 205).getRGB();
+        int outline = new Color(83, 98, 112, 135).getRGB();
+        int accent = new Color(150, 230, 190, 225).getRGB();
 
-        Render2D.outline(x + 12, y + 3, coordsWidth, 20, 0.35f, new Color(90, 90, 90, 255).getRGB(), 5);
+        Render2D.blur(x + 12, y + 3, coordsWidth, 20, 4, 6, new Color(0, 0, 0, 85).getRGB());
+        Render2D.gradientRect(x + 12, y + 3, coordsWidth, 20,
+                new int[]{panelLight, panel, panel, panelLight},
+                5);
+        Render2D.rect(x + 15, y + 5, 1.5f, 16, accent, 1);
+        Render2D.outline(x + 12, y + 3, coordsWidth, 20, 0.45f, outline, 5);
 
         float textY = y + 7;
         float textX = x + 12;
@@ -149,16 +150,11 @@ public class Info extends AbstractHudElement {
         if (showBps) {
             float bpsBoxX = x + 12 + coordsWidth + 4;
 
+            Render2D.blur(bpsBoxX, y + 3, bpsWidth, 20, 4, 6, new Color(0, 0, 0, 85).getRGB());
             Render2D.gradientRect(bpsBoxX, y + 3, bpsWidth, 20,
-                    new int[]{
-                            moonshine.util.color.ClientColors.primary(255),
-                            new Color(22, 22, 22, 255).getRGB(),
-                            moonshine.util.color.ClientColors.primary(255),
-                            new Color(22, 22, 22, 255).getRGB()
-                    },
+                    new int[]{panelLight, panel, panel, panelLight},
                     5);
-
-            Render2D.outline(bpsBoxX, y + 3, bpsWidth, 20, 0.35f, new Color(90, 90, 90, 255).getRGB(), 5);
+            Render2D.outline(bpsBoxX, y + 3, bpsWidth, 20, 0.45f, outline, 5);
 
             Fonts.ICONSTYPETHO.draw("l", bpsBoxX + 5, textY + 0.5f, 11, new Color(255, 255, 255, 255).getRGB());
 

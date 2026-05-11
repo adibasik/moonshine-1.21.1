@@ -77,23 +77,23 @@ public class TargetHud extends AbstractHudElement {
         if (entity.isInvisible() && !Network.isSpookyTime() && !Network.isCopyTime()) {
             return entity.getMaxHealth();
         }
-        if (Network.isReallyWorld()){
-            if (Initialization.getInstance().getManager().getModuleProvider().get(ScoreboardHealth.class).state) {
-                if (entity instanceof PlayerEntity player) {
-                    Scoreboard scoreboard = MinecraftClient.getInstance().world.getScoreboard();
-                    if (scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME) == null) return 0f;
-                    ScoreboardObjective objective = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME);
-                    if (objective == null) return 0f;
-                    ReadableScoreboardScore score = scoreboard.getScore(player, objective);
-                    MutableText text = ReadableScoreboardScore.getFormattedScore(score, objective.getNumberFormatOr(StyledNumberFormat.EMPTY));
 
-                    return Float.parseFloat(text.getString().replaceAll("\\D", ""));
-                } else return entity.getHealth() + entity.getAbsorptionAmount();
-            } else return entity.getHealth() + entity.getAbsorptionAmount();
+        if (Initialization.getInstance().getManager().getModuleProvider()
+                .get(ScoreboardHealth.class).isState() && entity instanceof PlayerEntity player) {
+
+            Scoreboard scoreboard = player.getEntityWorld().getScoreboard();
+
+            ScoreboardObjective objective = scoreboard.getObjectiveForSlot(ScoreboardDisplaySlot.BELOW_NAME);
+            if (objective == null) return entity.getHealth();
+
+            ReadableScoreboardScore score = scoreboard.getScore(player, objective);
+            if (score == null) return entity.getHealth();
+
+            return score.getScore();
         }
+
         return entity.getHealth();
     }
-
     private String getHealthString(float health) {
         if (lastTarget != null && lastTarget.isInvisible() && !Network.isSpookyTime() && !Network.isCopyTime()) {
             return "??";
@@ -133,19 +133,17 @@ public class TargetHud extends AbstractHudElement {
     private void drawBackground(float x, float y, float alpha) {
         int alphaInt = (int) (255 * alpha);
 
+        int panel = new Color(14, 17, 22, (int) (225 * alpha)).getRGB();
+        int panelLight = new Color(28, 35, 43, (int) (205 * alpha)).getRGB();
+        int outline = new Color(83, 98, 112, (int) (135 * alpha)).getRGB();
+
+        Render2D.blur(x + 2, y + 2, getWidth() - 4, getHeight() - 4, 5, 8,
+                new Color(0, 0, 0, (int) (90 * alpha)).getRGB());
         Render2D.gradientRect(x + 2, y + 2, getWidth() - 4, getHeight() - 4,
-                new int[]{
-                        moonshine.util.color.ClientColors.primary(alphaInt),
-                        moonshine.util.color.ClientColors.secondary(alphaInt),
-                        moonshine.util.color.ClientColors.primary(alphaInt),
-                        moonshine.util.color.ClientColors.secondary(alphaInt)
-                },
+                new int[]{panelLight, panel, panel, panelLight},
                 6);
-
-        Render2D.outline(x + 2, y + 2, getWidth() - 4, getHeight() - 4, 0.35f, new Color(90, 90, 90, alphaInt).getRGB(), 5);
-
-        int blurTint = ColorUtil.rgba(0, 0, 0, 0);
-        Render2D.blur(x + 2, y + 2, 1, 1, 0f, 7, blurTint);
+        Render2D.outline(x + 2, y + 2, getWidth() - 4, getHeight() - 4, 0.45f, outline, 6);
+        Render2D.rect(x + 6, y + 6, 2f, getHeight() - 12, new Color(98, 189, 255, (int) (210 * alpha)).getRGB(), 1);
     }
 
     private void drawFace(float x, float y, float alpha) {
@@ -252,13 +250,13 @@ public class TargetHud extends AbstractHudElement {
         float barRadius = 2;
 
         Render2D.rect(barX, barY, barWidth, barHeight,
-                moonshine.util.color.ClientColors.secondary((int) (200 * alpha)), barRadius);
+                new Color(35, 42, 50, (int) (210 * alpha)).getRGB(), barRadius);
 
         float healthPercent = Math.max(0, Math.min(1, healthAnimation));
         float trailPercent = Math.max(0, Math.min(1, trailAnimation));
 
         if (trailPercent > healthPercent) {
-            int trailColor = moonshine.util.color.ClientColors.primary((int) (160 * alpha));
+            int trailColor = new Color(80, 125, 155, (int) (120 * alpha)).getRGB();
             Render2D.rect(barX, barY, barWidth * trailPercent, barHeight, trailColor, barRadius);
         }
 
@@ -272,10 +270,12 @@ public class TargetHud extends AbstractHudElement {
                 float charWave = (float) Math.sin(wavePhase - i * 1.5f);
                 float waveFactor = (charWave + 1f) / 2f;
 
-                int baseGray = (int) (155 + 100 * waveFactor);
+                int red = (int) (90 + 35 * waveFactor);
+                int green = (int) (185 + 45 * waveFactor);
+                int blue = 255;
 
-                colors[i * 2] = new Color(baseGray, baseGray, baseGray, (int) (255 * alpha)).getRGB();
-                colors[i * 2 + 1] = new Color(baseGray, baseGray, baseGray, (int) (255 * alpha)).getRGB();
+                colors[i * 2] = new Color(red, green, blue, (int) (240 * alpha)).getRGB();
+                colors[i * 2 + 1] = new Color(red, green, blue, (int) (240 * alpha)).getRGB();
             }
 
             Render2D.gradientRect(barX, barY, barWidth * healthPercent, barHeight, colors, barRadius);

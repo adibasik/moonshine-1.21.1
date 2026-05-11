@@ -19,27 +19,27 @@ import moonshine.modules.impl.render.NoRender;
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin implements IMinecraft {
 
-    @ModifyArg(method = "renderBlockLayers", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0), index = 0)
-    private Object modifyChunkSectionsValue(Object value) {
-        if (value instanceof DynamicUniforms.ChunkSectionsValue original) {
-            ChunkAnimator chunkAnimator = ChunkAnimator.getInstance();
-            if (chunkAnimator != null && chunkAnimator.isState()) {
-                float visibility = original.visibility();
-                float animOffset = (1.0f - visibility) * 100f;
-                int newY = original.y() - (int) animOffset;
-                return new DynamicUniforms.ChunkSectionsValue(
-                        original.modelView(),
-                        original.x(),
-                        newY,
-                        original.z(),
-                        original.visibility(),
-                        original.textureAtlasWidth(),
-                        original.textureAtlasHeight()
-                );
-            }
-        }
-        return value;
-    }
+//    @ModifyArg(method = "renderBlockLayers", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0), index = 0)
+//    private Object modifyChunkSectionsValue(Object value) {
+//        if (value instanceof DynamicUniforms.ChunkSectionsValue original) {
+//            ChunkAnimator chunkAnimator = ChunkAnimator.getInstance();
+//            if (chunkAnimator != null && chunkAnimator.isState()) {
+//                float visibility = original.visibility();
+//                float animOffset = (1.0f - visibility) * 100f;
+//                int newY = original.y() - (int) animOffset;
+//                return new DynamicUniforms.ChunkSectionsValue(
+//                        original.modelView(),
+//                        original.x(),
+//                        newY,
+//                        original.z(),
+//                        original.visibility(),
+//                        original.textureAtlasWidth(),
+//                        original.textureAtlasHeight()
+//                );
+//            }
+//        }
+//        return value;
+//    }
 
     @Inject(method = "hasBlindnessOrDarkness", at = @At("HEAD"), cancellable = true)
     private void onHasBlindnessOrDarkness(Camera camera, CallbackInfoReturnable<Boolean> cir) {
